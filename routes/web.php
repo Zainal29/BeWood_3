@@ -64,6 +64,17 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::put('testimonials/{testimonial}', [TestimonialController::class, 'update'])->name('testimonials.update');
     Route::delete('testimonials/{testimonial}', [TestimonialController::class, 'destroy'])->name('testimonials.destroy');
 
+    // instagram
+    Route::resource('instagram', App\Http\Controllers\Admin\InstagramController::class)->names([
+    'index' => 'instagram.index',
+    'create' => 'instagram.create',
+    'store' => 'instagram.store',
+    'edit' => 'instagram.edit',
+    'update' => 'instagram.update',
+    'destroy' => 'instagram.destroy',
+]);
+
+
     // Orders
     Route::resource('orders', OrderController::class)->names([
         'index' => 'orders.index',

@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('instagram_posts', function (Blueprint $table) {
             $table->id();
-            $table->string('instagram_url');
+            $table->string('instagram_url')->nullable();
             $table->string('image');
             $table->boolean('is_active')->default(true);
             $table->timestamps();

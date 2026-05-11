@@ -90,7 +90,17 @@
     <span class="font-sans text-sm font-medium">Testimonial</span>
 </a>
 
-                <!-- 6. Pesanan -->
+    {{-- 7 instagram --}}
+    <a href="{{ route('admin.instagram.index') }}"
+   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
+          {{ $currentRoute == 'admin.instagram.index' || str_contains($currentRoute, 'admin.instagram.') ? 'bg-sage-700/70 text-white shadow-md' : 'text-sage-200 hover:bg-sage-700/50 hover:text-white' }}">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
+    </svg>
+    <span class="font-sans text-sm font-medium">Instagram Feed</span>
+</a>
+
+                <!-- 8. Pesanan -->
                 <a href="{{ route('admin.orders.index') }}"
                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
                           {{ $currentRoute == 'admin.orders.index' || str_contains($currentRoute, 'admin.orders.') ? 'bg-sage-700/70 text-white shadow-md' : 'text-sage-200 hover:bg-sage-700/50 hover:text-white' }}">

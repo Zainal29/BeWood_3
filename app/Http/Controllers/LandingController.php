@@ -38,10 +38,7 @@ class LandingController extends Controller
             ->get();
 
         // Instagram posts
-        $instagramPosts = InstagramPost::where('is_active', true)
-            ->latest()
-            ->take(6)
-            ->get();
+       $instagramPosts = InstagramPost::where('is_active', true)->latest()->limit(6)->get();
 
         // Hero section settings (dinamis untuk edit admin)
         $heroSettings = SettingsService::getAll();
