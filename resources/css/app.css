@@ -1,0 +1,843 @@
+@import "tailwindcss";
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+/* =====================================================
+   THEME DEFINITION (Tailwind v4)
+   ===================================================== */
+@theme {
+    /* Font Family */
+    --font-serif: "Cormorant Garamond", Georgia, serif;
+    --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+
+    /* Color Palette */
+    --color-sage-50: #f4f7f4;
+    --color-sage-100: #e6ede6;
+    --color-sage-200: #cddccd;
+    --color-sage-300: #a9c3a9;
+    --color-sage-400: #7da47d;
+    --color-sage-500: #5a865a;
+    --color-sage-600: #456945;
+    --color-sage-700: #385438;
+    --color-sage-800: #2e432e;
+    --color-sage-900: #273827;
+    --color-sage-950: #131f13;
+    --color-cream: #fafaf7;
+    --color-parchment: #f2f0ea;
+    --color-gold: #b8974a;
+    --color-gold-light: #d4b47a;
+    --color-gold-dark: #8b7438;
+    --color-charcoal: #1a1f1a;
+
+    /* Background Images */
+    --background-image-gradient-radial: radial-gradient(
+        var(--tw-gradient-stops)
+    );
+    --background-image-pattern-dots: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23a9c3a9' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+
+    /* Box Shadows */
+    --shadow-premium: 0 24px 80px -20px rgba(39, 56, 39, 0.25);
+    --shadow-premium-hover: 0 32px 100px -24px rgba(39, 56, 39, 0.35);
+    --shadow-gold: 0 8px 32px rgba(184, 151, 74, 0.25);
+
+    /* Backdrop Blur */
+    --backdrop-blur-xs: 2px;
+}
+
+/* =====================================================
+   KEYFRAMES & ANIMATIONS (harus didefinisikan secara eksplisit)
+   ===================================================== */
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-12px);
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes shine {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+@keyframes bounceSlow {
+    0%,
+    100% {
+        transform: translateY(0) translateX(-50%);
+    }
+    50% {
+        transform: translateY(12px) translateX(-50%);
+    }
+}
+
+@keyframes badgePop {
+    0% {
+        transform: scale(1);
+    }
+    40% {
+        transform: scale(1.4);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Utility classes untuk animasi langsung pakai @utility */
+@utility animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+@utility animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+@utility animate-marquee {
+    animation: marquee 35s linear infinite;
+}
+
+@utility animate-shine {
+    animation: shine 2s ease-in-out infinite;
+}
+
+@utility animate-bounce-slow {
+    animation: bounceSlow 2.5s ease-in-out infinite;
+}
+
+@utility animate-badge-pop {
+    animation: badgePop 0.35s ease;
+}
+
+/* =====================================================
+   GLOBAL BASE STYLES
+   ===================================================== */
+@layer base {
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    html {
+        scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+        font-family: var(--font-sans);
+        background-color: var(--color-cream);
+        color: var(--color-sage-900);
+        overflow-x: hidden;
+        line-height: 1.6;
+    }
+
+    ::selection {
+        background-color: var(--color-sage-500);
+        color: #fff;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-sage-400);
+        outline-offset: 2px;
+    }
+}
+
+/* =====================================================
+   CUSTOM COMPONENTS (Tailwind v4 @layer components)
+   ===================================================== */
+@layer components {
+    /* ----- Buttons ----- */
+    .btn {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        letter-spacing: 0.12em;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .btn::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            120deg,
+            transparent 30%,
+            rgba(255, 255, 255, 0.2) 50%,
+            transparent 70%
+        );
+        transform: translateX(-100%);
+        transition: transform 0.6s ease;
+    }
+
+    .btn:hover::after {
+        transform: translateX(100%);
+    }
+
+    .btn-primary {
+        background-color: var(--color-sage-600);
+        color: var(--color-cream);
+        border: 1.5px solid var(--color-sage-600);
+        box-shadow: 0 4px 20px rgba(69, 105, 69, 0.25);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--color-sage-800);
+        box-shadow: 0 12px 40px rgba(69, 105, 69, 0.4);
+        transform: translateY(-2px);
+    }
+
+    .btn-outline {
+        background: transparent;
+        color: var(--color-cream);
+        border: 1.5px solid rgba(250, 250, 247, 0.7);
+    }
+
+    .btn-outline:hover {
+        background: rgba(250, 250, 247, 0.15);
+        border-color: var(--color-cream);
+        transform: translateY(-2px);
+    }
+
+    .btn-light {
+        background-color: var(--color-cream);
+        color: var(--color-sage-900);
+        border: 1.5px solid var(--color-cream);
+    }
+
+    .btn-light:hover {
+        background-color: var(--color-sage-100);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(39, 56, 39, 0.15);
+    }
+
+    .btn-gold {
+        background: linear-gradient(
+            135deg,
+            var(--color-gold),
+            var(--color-gold-dark)
+        );
+        color: var(--color-sage-950);
+        border: none;
+        box-shadow: 0 4px 20px rgba(184, 151, 74, 0.3);
+    }
+
+    .btn-gold:hover {
+        box-shadow: 0 12px 32px rgba(184, 151, 74, 0.45);
+        transform: translateY(-2px);
+    }
+
+    .btn-sage {
+        background-color: var(--color-sage-600);
+        color: var(--color-cream);
+        letter-spacing: 0.1em;
+        transition:
+            background 0.25s,
+            box-shadow 0.25s,
+            transform 0.15s;
+    }
+
+    .btn-sage:hover {
+        background-color: var(--color-sage-800);
+        box-shadow: 0 8px 24px rgba(69, 105, 69, 0.3);
+    }
+
+    .btn-sage:active {
+        transform: scale(0.98);
+    }
+
+    .btn-wa {
+        background-color: #25d366;
+        color: #fff;
+        letter-spacing: 0.1em;
+        transition:
+            background 0.25s,
+            box-shadow 0.25s,
+            transform 0.15s;
+    }
+
+    .btn-wa:hover {
+        background-color: #1eb857;
+        box-shadow: 0 8px 24px rgba(37, 211, 102, 0.3);
+    }
+
+    .btn-outline-sage {
+        background: transparent;
+        color: var(--color-sage-600);
+        border: 1.5px solid var(--color-sage-600);
+        letter-spacing: 0.1em;
+        transition:
+            background 0.25s,
+            color 0.25s;
+    }
+
+    .btn-outline-sage:hover {
+        background: var(--color-sage-600);
+        color: var(--color-cream);
+    }
+
+    /* ----- Cards ----- */
+    .product-card,
+    .cat-card {
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: transform, box-shadow;
+    }
+
+    .product-card:hover,
+    .cat-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 32px 80px -16px rgba(39, 56, 39, 0.18);
+    }
+
+    .product-card img,
+    .cat-card img {
+        transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: transform;
+    }
+
+    .product-card:hover img,
+    .cat-card:hover img {
+        transform: scale(1.08);
+    }
+
+    /* ----- Cart Sidebar & Overlay ----- */
+    #cart-sidebar {
+        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: transform;
+    }
+
+    #cart-overlay {
+        transition: opacity 0.4s ease;
+        backdrop-filter: blur(4px);
+    }
+
+    /* ----- Marquee ----- */
+    .marquee-track {
+        animation: marquee 35s linear infinite;
+        display: flex;
+        width: max-content;
+        will-change: transform;
+    }
+
+    /* ----- Quick View Modal ----- */
+    #quick-view-modal {
+        transition:
+            opacity 0.3s ease,
+            visibility 0.3s ease;
+    }
+
+    #quick-view-modal.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    /* ----- Toast ----- */
+    #toast-container {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        pointer-events: none;
+    }
+
+    .toast {
+        background-color: var(--color-sage-950);
+        color: #fff;
+        padding: 1rem 1.5rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        animation: fadeInUp 0.3s ease-out;
+        pointer-events: auto;
+        max-width: 320px;
+    }
+
+    .toast.success {
+        border-left: 3px solid #22c55e;
+    }
+
+    .toast.error {
+        border-left: 3px solid #ef4444;
+    }
+
+    .toast.info {
+        border-left: 3px solid #3b82f6;
+    }
+
+    /* ----- Progress Bar ----- */
+    #scroll-progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background: linear-gradient(
+            90deg,
+            var(--color-sage-400),
+            var(--color-gold)
+        );
+        z-index: 60;
+        transition: width 0.1s ease;
+        box-shadow: 0 2px 8px rgba(69, 105, 69, 0.3);
+    }
+
+    /* ----- Back to Top ----- */
+    #back-to-top {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 45;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background-color: var(--color-sage-600);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 20px rgba(69, 105, 69, 0.35);
+    }
+
+    #back-to-top.visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    #back-to-top:hover {
+        background-color: var(--color-sage-800);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(69, 105, 69, 0.5);
+    }
+
+    /* ----- Gallery ----- */
+    .gallery-thumb {
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: 2px solid transparent;
+    }
+
+    .gallery-thumb.active,
+    .gallery-thumb:hover {
+        border-color: var(--color-sage-400);
+        transform: scale(1.03);
+    }
+
+    /* ----- Accordion FAQ ----- */
+    .accordion-item {
+        border-bottom: 1px solid var(--color-sage-200);
+    }
+
+    .accordion-btn {
+        width: 100%;
+        text-align: left;
+        padding: 1.25rem 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+
+    .accordion-btn:hover {
+        color: var(--color-sage-600);
+    }
+
+    .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease-out;
+    }
+
+    .accordion-content.open {
+        max-height: 500px;
+        transition: max-height 0.5s ease-in;
+    }
+
+    .accordion-icon {
+        transition: transform 0.3s ease;
+    }
+
+    .accordion-btn[aria-expanded="true"] .accordion-icon {
+        transform: rotate(180deg);
+    }
+
+    /* ----- Instagram Feed ----- */
+    .insta-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+    }
+
+    .insta-item {
+        aspect-ratio: 1;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(
+            135deg,
+            var(--color-sage-100),
+            var(--color-sage-200)
+        );
+    }
+
+    .insta-item::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-color: rgba(19, 31, 19, 0);
+        transition: background-color 0.3s;
+    }
+
+    .insta-item:hover::after {
+        background-color: rgba(19, 31, 19, 0.25);
+    }
+
+    /* ----- WhatsApp Button ----- */
+    #wa-btn {
+        box-shadow: 0 6px 24px rgba(37, 211, 102, 0.45);
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        animation: float 4s ease-in-out infinite;
+    }
+
+    #wa-btn:hover {
+        transform: scale(1.1) translateY(-4px);
+        box-shadow: 0 16px 40px rgba(37, 211, 102, 0.6);
+    }
+
+    /* ----- Divider ----- */
+    .divider-sage {
+        width: 48px;
+        height: 2px;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            var(--color-sage-400),
+            transparent
+        );
+        display: inline-block;
+        margin: 1.5rem auto;
+    }
+
+    /* ----- Theme Toggle ----- */
+    .theme-toggle {
+        width: 44px;
+        height: 24px;
+        border-radius: 12px;
+        background-color: var(--color-sage-200);
+        position: relative;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .theme-toggle::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #fff;
+        transition: transform 0.3s;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+
+    .dark .theme-toggle {
+        background-color: var(--color-sage-700);
+    }
+
+    .dark .theme-toggle::after {
+        transform: translateX(20px);
+    }
+
+    /* ----- Product Detail Page ----- */
+    .thumb-item {
+        transition: all 0.2s ease;
+        border: 2px solid transparent;
+        cursor: pointer;
+    }
+
+    .thumb-item.active {
+        border-color: var(--color-sage-600);
+    }
+
+    .thumb-item:hover:not(.active) {
+        border-color: var(--color-sage-300);
+    }
+
+    #main-img {
+        transition: opacity 0.3s ease;
+    }
+
+    #main-img.fade {
+        opacity: 0;
+    }
+
+    .swatch {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: 2px solid transparent;
+        outline: 2px solid transparent;
+        outline-offset: 2px;
+    }
+
+    .swatch.active {
+        outline-color: var(--color-sage-600);
+    }
+
+    .swatch:hover:not(.active) {
+        transform: scale(1.1);
+    }
+
+    .spec-row:not(:last-child) {
+        border-bottom: 1px solid var(--color-sage-100);
+    }
+
+    .tab-btn {
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-btn::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--color-sage-600);
+        transform: scaleX(0);
+        transition: transform 0.25s ease;
+    }
+
+    .tab-btn.active::after {
+        transform: scaleX(1);
+    }
+
+    .stars {
+        color: var(--color-gold);
+    }
+
+    .qty-btn {
+        width: 36px;
+        height: 36px;
+        border: 1.5px solid var(--color-sage-200);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.15s;
+        font-size: 1.1rem;
+        color: var(--color-sage-600);
+    }
+
+    .qty-btn:hover {
+        background: var(--color-sage-100);
+    }
+
+    .bc-sep {
+        color: var(--color-sage-300);
+    }
+
+    #sticky-bar {
+        box-shadow: 0 -4px 20px rgba(39, 56, 39, 0.08);
+    }
+
+    #wa-float {
+        box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+        transition:
+            transform 0.2s,
+            box-shadow 0.2s;
+    }
+
+    #wa-float:hover {
+        transform: scale(1.08);
+        box-shadow: 0 8px 28px rgba(37, 211, 102, 0.5);
+    }
+
+    #main-img-wrap {
+        cursor: zoom-in;
+    }
+
+    .view-section {
+        transition:
+            opacity 0.4s ease,
+            transform 0.4s ease;
+    }
+
+    .view-section.hidden {
+        opacity: 0;
+        transform: translateY(20px);
+        pointer-events: none;
+        position: absolute;
+        width: 100%;
+        left: 0;
+        top: 0;
+        visibility: hidden;
+    }
+
+    .view-section.active {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+        position: relative;
+        visibility: visible;
+    }
+}
+
+/* =====================================================
+   CUSTOM UTILITIES (Tailwind v4 @utility)
+   ===================================================== */
+@utility reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition:
+        opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@utility delay-100 {
+    transition-delay: 0.1s;
+}
+
+@utility delay-200 {
+    transition-delay: 0.2s;
+}
+
+@utility delay-300 {
+    transition-delay: 0.3s;
+}
+
+@utility delay-400 {
+    transition-delay: 0.4s;
+}
+
+/* =====================================================
+   LOADING SCREEN & NAVBAR
+   ===================================================== */
+#loading-screen {
+    position: fixed;
+    inset: 0;
+    background: var(--color-sage-950);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+        opacity 0.5s ease,
+        visibility 0.5s ease;
+}
+
+#loading-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.loader-logo {
+    animation: float 3s ease-in-out infinite;
+}
+
+.loader-bar {
+    width: 200px;
+    height: 2px;
+    background: var(--color-sage-800);
+    margin-top: 2rem;
+    position: relative;
+    overflow: hidden;
+    border-radius: 2px;
+}
+
+.loader-bar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--color-sage-400),
+        transparent
+    );
+    animation: shine 1.5s infinite;
+}
+
+#navbar {
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    padding: 1.25rem 1.5rem;
+}
+
+#navbar.scrolled {
+    background: rgba(250, 250, 247, 0.92);
+    backdrop-filter: saturate(180%) blur(20px);
+    box-shadow:
+        0 1px 0 rgba(205, 220, 205, 0.6),
+        0 8px 32px rgba(39, 56, 39, 0.08);
+    padding: 0.75rem 1.5rem;
+}
+
+#navbar.scrolled .nav-logo {
+    font-size: 1.375rem;
+}
+
+/* =====================================================
+   RESPONSIVE OVERRIDES
+   ===================================================== */
+@media (max-width: 768px) {
+    .insta-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
