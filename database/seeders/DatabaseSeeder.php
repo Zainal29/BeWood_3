@@ -16,7 +16,11 @@ class DatabaseSeeder extends Seeder
     {
         // 1. USER ADMIN
         User::firstOrCreate(
+<<<<<<< HEAD
             ['email' => 'admin@gmail.com'],
+=======
+            ['email' => 'zainal@gmail.com'],
+>>>>>>> 6b3b1131d1ae2004399bca32bbd33fa0e72acf42
             [
                 'name' => 'Admin Gua',
                 'password' => Hash::make('12345678'),
