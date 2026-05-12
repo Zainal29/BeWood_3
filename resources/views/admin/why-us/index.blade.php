@@ -24,75 +24,89 @@
             @csrf @method('PUT')
             <div class="mb-4">
                 <label class="block text-sage-700 mb-2">Judul</label>
-                <input type="text" name="title" value="{{ $settings['title'] ?? 'Mengapa BeWood?' }}" class="w-full border border-sage-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-sage-300">
+                <input type="text" name="title" value="{{ $settings['title'] ?? 'Mengapa BeWood?' }}"
+                       class="w-full border border-sage-200 rounded-lg px-4 py-2">
             </div>
             <div class="mb-4">
                 <label class="block text-sage-700 mb-2">Subjudul</label>
-                <textarea name="subtitle" rows="3" class="w-full border border-sage-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-sage-300">{{ $settings['subtitle'] ?? '' }}</textarea>
+                <textarea name="subtitle" rows="3"
+                          class="w-full border border-sage-200 rounded-lg px-4 py-2">{{ $settings['subtitle'] ?? '' }}</textarea>
             </div>
             <button type="submit" class="btn-primary px-6 py-2 text-sm">Simpan Pengaturan</button>
         </form>
     </div>
 
-    <!-- Items -->
+    <!-- Items (Tiga Pilar) -->
     <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
         <h2 class="font-serif text-xl mb-4">Tiga Pilar</h2>
-        @foreach($items as $item)
-        <form method="POST" action="{{ route('admin.why-us.items.update', $item) }}" class="border-t pt-6 mt-6 first:border-0 first:pt-0 first:mt-0">
+        @forelse($items as $item)
+        <form method="POST" action="{{ route('admin.why-us.items.update', $item) }}"
+              class="border-t pt-6 mt-6 first:border-0 first:pt-0 first:mt-0">
             @csrf @method('PUT')
             <div class="grid md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sage-700 mb-2">Judul</label>
-                    <input type="text" name="title" value="{{ $item->title }}" class="w-full border border-sage-200 rounded-lg px-4 py-2" required>
+                    <input type="text" name="title" value="{{ $item->title }}" required
+                           class="w-full border border-sage-200 rounded-lg px-4 py-2">
                 </div>
                 <div>
                     <label class="block text-sage-700 mb-2">Order</label>
-                    <input type="number" name="order" value="{{ $item->order }}" class="w-full border border-sage-200 rounded-lg px-4 py-2">
+                    <input type="number" name="order" value="{{ $item->order }}"
+                           class="w-full border border-sage-200 rounded-lg px-4 py-2">
                 </div>
                 <div class="md:col-span-2">
                     <label class="block text-sage-700 mb-2">Deskripsi</label>
-                    <textarea name="description" rows="4" class="w-full border border-sage-200 rounded-lg px-4 py-2" required>{{ $item->description }}</textarea>
+                    <textarea name="description" rows="4" required
+                              class="w-full border border-sage-200 rounded-lg px-4 py-2">{{ $item->description }}</textarea>
                 </div>
                 <div class="md:col-span-2 flex justify-between items-center">
                     <label class="flex items-center gap-2">
-                        <input type="checkbox" name="is_active" value="1" {{ $item->is_active ? 'checked' : '' }} class="rounded">
+                        <input type="checkbox" name="is_active" value="1" {{ $item->is_active ? 'checked' : '' }}>
                         <span class="text-sage-700">Aktif</span>
                     </label>
                     <button type="submit" class="btn-primary px-6 py-2 text-sm">Update Item</button>
                 </div>
             </div>
         </form>
-        @endforeach
+        @empty
+        <p class="text-sage-500">Belum ada item. Silakan tambahkan melalui database.</p>
+        @endforelse
     </div>
 
-    <!-- Stats -->
+    <!-- Statistik -->
     <div class="bg-white rounded-xl shadow-sm p-6">
         <h2 class="font-serif text-xl mb-4">Statistik</h2>
         <div class="grid md:grid-cols-2 gap-6">
-        @foreach($stats as $stat)
-        <form method="POST" action="{{ route('admin.why-us.stats.update', $stat) }}" class="border border-sage-200 rounded-lg p-4">
-            @csrf @method('PUT')
-            <div class="mb-3">
-                <label class="block text-sage-600 text-sm mb-1">Label</label>
-                <input type="text" name="label" value="{{ $stat->label }}" class="w-full border border-sage-200 rounded-lg px-3 py-2">
-            </div>
-            <div class="mb-3">
-                <label class="block text-sage-600 text-sm mb-1">Nilai</label>
-                <input type="text" name="value" value="{{ $stat->value }}" class="w-full border border-sage-200 rounded-lg px-3 py-2">
-            </div>
-            <div class="mb-3">
-                <label class="block text-sage-600 text-sm mb-1">Order</label>
-                <input type="number" name="order" value="{{ $stat->order }}" class="w-32 border border-sage-200 rounded-lg px-3 py-2">
-            </div>
-            <div class="flex justify-between items-center mt-4">
-                <label class="flex items-center gap-2">
-                    <input type="checkbox" name="is_active" value="1" {{ $stat->is_active ? 'checked' : '' }} class="rounded">
-                    <span class="text-sm text-sage-600">Aktif</span>
-                </label>
-                <button type="submit" class="btn-primary px-4 py-1 text-sm">Update</button>
-            </div>
-        </form>
-        @endforeach
+            @forelse($stats as $stat)
+            <form method="POST" action="{{ route('admin.why-us.stats.update', $stat) }}"
+                  class="border border-sage-200 rounded-lg p-4">
+                @csrf @method('PUT')
+                <div class="mb-3">
+                    <label class="block text-sage-600 text-sm mb-1">Label</label>
+                    <input type="text" name="label" value="{{ $stat->label }}"
+                           class="w-full border border-sage-200 rounded-lg px-3 py-2">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sage-600 text-sm mb-1">Nilai</label>
+                    <input type="text" name="value" value="{{ $stat->value }}"
+                           class="w-full border border-sage-200 rounded-lg px-3 py-2">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sage-600 text-sm mb-1">Order</label>
+                    <input type="number" name="order" value="{{ $stat->order }}"
+                           class="w-32 border border-sage-200 rounded-lg px-3 py-2">
+                </div>
+                <div class="flex justify-between items-center mt-4">
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" name="is_active" value="1" {{ $stat->is_active ? 'checked' : '' }}>
+                        <span class="text-sm text-sage-600">Aktif</span>
+                    </label>
+                    <button type="submit" class="btn-primary px-4 py-1 text-sm">Update</button>
+                </div>
+            </form>
+            @empty
+            <p class="text-sage-500">Belum ada statistik.</p>
+            @endforelse
         </div>
     </div>
 </div>
@@ -102,20 +116,19 @@
 <script>
     @if(session('success'))
         Swal.fire({
-            icon: 'success', 
-            title: 'Berhasil', 
-            text: "{{ session('success') }}", 
-            confirmButtonColor: '#5f7e5f', 
-            timer: 3000, 
+            icon: 'success',
+            title: 'Berhasil',
+            text: "{{ session('success') }}",
+            confirmButtonColor: '#5f7e5f',
+            timer: 3000,
             showConfirmButton: false
         });
     @endif
-
     @if(session('error'))
         Swal.fire({
-            icon: 'error', 
-            title: 'Gagal', 
-            text: "{{ session('error') }}", 
+            icon: 'error',
+            title: 'Gagal',
+            text: "{{ session('error') }}",
             confirmButtonColor: '#b91c1c'
         });
     @endif

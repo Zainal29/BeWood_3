@@ -21,8 +21,8 @@ class LandingController extends Controller
             ->limit(3)
             ->get();
 
-        // Featured products (unggulan, terlaris, atau baru)
-        $products = Product::with('category', 'variants')
+        // Featured products (unggulan, terlaris, atau baru) - tanpa relasi 'variants' untuk menghindari error
+        $products = Product::with('category') // Hanya relasi category, hapus variants jika belum ada
             ->where('is_active', true)
             ->where(function($q) {
                 $q->where('is_featured', true)

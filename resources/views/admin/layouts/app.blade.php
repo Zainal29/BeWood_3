@@ -109,8 +109,7 @@
                     </svg>
                     <span class="font-sans text-sm font-medium">Pesanan</span>
                 </a>
-<<<<<<< HEAD
-                <a href="{{ route('admin.faqs.index') }}" 
+                <a href="{{ route('admin.faqs.index') }}"
                     class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
                     { $currentRoute == 'admin.faqs.index' || str_contains($currentRoute, 'admin.faqs.') ? 'bg-sage-700/70 text-white shadow-md' : 'text-sage-200 hover:bg-sage-700/50 hover:text-white' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,8 +117,6 @@
                     </svg>
                     <span class="font-sans text-sm font-medium">FAQ</span>
                 </a>
-=======
->>>>>>> 6b3b1131d1ae2004399bca32bbd33fa0e72acf42
             </nav>
 
             <!-- User Profile & Logout -->
