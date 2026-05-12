@@ -50,7 +50,17 @@
                     <span class="font-sans text-sm font-medium">Hero Section</span>
                 </a>
 
-                <!-- 3. Kategori -->
+                <!-- 3. Marquee / Running Text -->
+                <a href="{{ route('admin.marquee.index') }}"
+                   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
+                          {{ $currentRoute == 'admin.marquee.index' || str_contains($currentRoute, 'admin.marquee.') ? 'bg-sage-700/70 text-white shadow-md' : 'text-sage-200 hover:bg-sage-700/50 hover:text-white' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                    </svg>
+                    <span class="font-sans text-sm font-medium">Marquee / Running Text</span>
+                </a>
+
+                <!-- 4. Kategori -->
                 <a href="{{ route('admin.categories.index') }}"
                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
                           {{ $currentRoute == 'admin.categories.index' || str_contains($currentRoute, 'admin.categories.') ? 'bg-sage-700/70 text-white shadow-md' : 'text-sage-200 hover:bg-sage-700/50 hover:text-white' }}">
@@ -60,7 +70,7 @@
                     <span class="font-sans text-sm font-medium">Kategori</span>
                 </a>
 
-                <!-- 4. Produk -->
+                <!-- 5. Produk -->
                 <a href="{{ route('admin.products.index') }}"
                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
                           {{ $currentRoute == 'admin.products.index' || str_contains($currentRoute, 'admin.products.') ? 'bg-sage-700/70 text-white shadow-md' : 'text-sage-200 hover:bg-sage-700/50 hover:text-white' }}">
@@ -70,7 +80,7 @@
                     <span class="font-sans text-sm font-medium">Produk</span>
                 </a>
 
-                <!-- 5. Mengapa BeWood? -->
+                <!-- 6. Mengapa BeWood? (Why Us) -->
                 <a href="{{ route('admin.why-us.index') }}"
                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
                           {{ $currentRoute == 'admin.why-us.index' ? 'bg-sage-700/70 text-white shadow-md' : 'text-sage-200 hover:bg-sage-700/50 hover:text-white' }}">
@@ -80,27 +90,27 @@
                     <span class="font-sans text-sm font-medium">Mengapa BeWood?</span>
                 </a>
 
-                {{-- 6 testimonials --}}
+                <!-- 7. Testimonial -->
                 <a href="{{ route('admin.testimonials.index') }}"
-   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
-          {{ request()->route()->getName() == 'admin.testimonials.index' || str_contains(request()->route()->getName(), 'admin.testimonials.') ? 'bg-sage-700/70 text-white shadow-md' : 'text-sage-200 hover:bg-sage-700/50 hover:text-white' }}">
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-    </svg>
-    <span class="font-sans text-sm font-medium">Testimonial</span>
-</a>
+                   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
+                          {{ $currentRoute == 'admin.testimonials.index' || str_contains($currentRoute, 'admin.testimonials.') ? 'bg-sage-700/70 text-white shadow-md' : 'text-sage-200 hover:bg-sage-700/50 hover:text-white' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                    </svg>
+                    <span class="font-sans text-sm font-medium">Testimonial</span>
+                </a>
 
-    {{-- 7 instagram --}}
-    <a href="{{ route('admin.instagram.index') }}"
-   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
-          {{ $currentRoute == 'admin.instagram.index' || str_contains($currentRoute, 'admin.instagram.') ? 'bg-sage-700/70 text-white shadow-md' : 'text-sage-200 hover:bg-sage-700/50 hover:text-white' }}">
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
-    </svg>
-    <span class="font-sans text-sm font-medium">Instagram Feed</span>
-</a>
+                <!-- 8. Instagram Feed -->
+                <a href="{{ route('admin.instagram.index') }}"
+                   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
+                          {{ $currentRoute == 'admin.instagram.index' || str_contains($currentRoute, 'admin.instagram.') ? 'bg-sage-700/70 text-white shadow-md' : 'text-sage-200 hover:bg-sage-700/50 hover:text-white' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
+                    </svg>
+                    <span class="font-sans text-sm font-medium">Instagram Feed</span>
+                </a>
 
-                <!-- 8. Pesanan -->
+                <!-- 9. Pesanan -->
                 <a href="{{ route('admin.orders.index') }}"
                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
                           {{ $currentRoute == 'admin.orders.index' || str_contains($currentRoute, 'admin.orders.') ? 'bg-sage-700/70 text-white shadow-md' : 'text-sage-200 hover:bg-sage-700/50 hover:text-white' }}">
@@ -109,17 +119,16 @@
                     </svg>
                     <span class="font-sans text-sm font-medium">Pesanan</span>
                 </a>
-<<<<<<< HEAD
-                <a href="{{ route('admin.faqs.index') }}" 
-                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
-                    { $currentRoute == 'admin.faqs.index' || str_contains($currentRoute, 'admin.faqs.') ? 'bg-sage-700/70 text-white shadow-md' : 'text-sage-200 hover:bg-sage-700/50 hover:text-white' }}">
+
+                <!-- 10. FAQ -->
+                <a href="{{ route('admin.faqs.index') }}"
+                   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
+                          {{ $currentRoute == 'admin.faqs.index' || str_contains($currentRoute, 'admin.faqs.') ? 'bg-sage-700/70 text-white shadow-md' : 'text-sage-200 hover:bg-sage-700/50 hover:text-white' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
                     </svg>
                     <span class="font-sans text-sm font-medium">FAQ</span>
                 </a>
-=======
->>>>>>> 6b3b1131d1ae2004399bca32bbd33fa0e72acf42
             </nav>
 
             <!-- User Profile & Logout -->
