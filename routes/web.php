@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\ProductController as FrontProductController;
 use App\Http\Controllers\Api\SearchController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\MarqueeController;
 
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 Route::get('/product/{slug}', [FrontProductController::class, 'show'])->name('product.show');
@@ -94,6 +95,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
         'update' => 'faqs.update',
         'destroy' => 'faqs.destroy',
     ]);
+    Route::prefix('marquee')->name('marquee.')->group(function () {
+    Route::get('/', [MarqueeController::class, 'index'])->name('index');
+    Route::post('/items', [MarqueeController::class, 'store'])->name('store');
+    Route::put('/items/{item}', [MarqueeController::class, 'update'])->name('update');
+    Route::delete('/items/{item}', [MarqueeController::class, 'destroy'])->name('destroy');
+    });
 });
 
 require __DIR__ . '/auth.php';
