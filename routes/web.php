@@ -10,14 +10,22 @@ use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\WhyUsController;
 use App\Http\Controllers\Admin\InstagramController;
 use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\MarqueeController;
+use App\Http\Controllers\PageController; // <-- TAMBAHKAN INI
 use App\Http\Controllers\ProductController as FrontProductController;
 use App\Http\Controllers\Api\SearchController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\MarqueeController;
 
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 Route::get('/product/{slug}', [FrontProductController::class, 'show'])->name('product.show');
 Route::get('/api/search', [SearchController::class, 'search'])->name('api.search');
+
+// Halaman statis
+Route::get('/produk', [PageController::class, 'products'])->name('products');
+Route::get('/tentang', [PageController::class, 'about'])->name('about');
+Route::get('/faq', [PageController::class, 'faq'])->name('faq');
+Route::get('/kontak', [PageController::class, 'contact'])->name('contact');
+Route::post('/kontak', [PageController::class, 'submitContact'])->name('contact.submit');
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     // Dashboard
@@ -95,11 +103,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
         'update' => 'faqs.update',
         'destroy' => 'faqs.destroy',
     ]);
+
+    // Marquee
     Route::prefix('marquee')->name('marquee.')->group(function () {
-    Route::get('/', [MarqueeController::class, 'index'])->name('index');
-    Route::post('/items', [MarqueeController::class, 'store'])->name('store');
-    Route::put('/items/{item}', [MarqueeController::class, 'update'])->name('update');
-    Route::delete('/items/{item}', [MarqueeController::class, 'destroy'])->name('destroy');
+        Route::get('/', [MarqueeController::class, 'index'])->name('index');
+        Route::post('/items', [MarqueeController::class, 'store'])->name('store');
+        Route::put('/items/{item}', [MarqueeController::class, 'update'])->name('update');
+        Route::delete('/items/{item}', [MarqueeController::class, 'destroy'])->name('destroy');
     });
 });
 
