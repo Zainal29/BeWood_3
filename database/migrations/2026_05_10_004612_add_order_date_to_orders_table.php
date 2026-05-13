@@ -6,23 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
-    {
-      Schema::table('orders', function (Blueprint $table) {
-    $table->timestamp('order_date')->nullable()->after('delivery_status');
-});
-    }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            //
+            if (!Schema::hasColumn('orders', 'order_date')) {
+                $table->timestamp('order_date')->nullable()->after('delivery_status');
+            }
+        });
+    }
+
+    public function down()
+    {
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropColumn('order_date');
         });
     }
 };

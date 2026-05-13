@@ -10,35 +10,27 @@ class MarqueeController extends Controller
 {
     public function index()
     {
-        $items = MarqueeItem::orderBy('order')->get();
+        $items = MarqueeItem::orderBy('order')->paginate(10);
         return view('admin.marquee.index', compact('items'));
-    }
-
-    public function update(Request $request, MarqueeItem $item)
-    {
-        $request->validate([
-            'text' => 'required|string|max:255',
-            'order' => 'nullable|integer',
-            'is_active' => 'nullable|boolean',
-        ]);
-
-        $item->update($request->only(['text', 'order', 'is_active']));
-        return redirect()->back()->with('success', 'Item marquee berhasil diperbarui.');
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'text' => 'required|string|max:255',
-        ]);
-
-        MarqueeItem::create($request->all());
-        return redirect()->back()->with('success', 'Item marquee berhasil ditambahkan.');
+        $request->validate(['text' => 'required|string|max:255']);
+        MarqueeItem::create($request->only('text', 'order', 'is_active'));
+        return back()->with('success', 'Item marquee berhasil ditambahkan.');
     }
 
-    public function destroy(MarqueeItem $item)
+    public function update(Request $request, MarqueeItem $marqueeItem)
     {
-        $item->delete();
-        return redirect()->back()->with('success', 'Item marquee berhasil dihapus.');
+        $request->validate(['text' => 'required|string|max:255']);
+        $marqueeItem->update($request->only('text', 'order', 'is_active'));
+        return back()->with('success', 'Item marquee diperbarui.');
+    }
+
+    public function destroy(MarqueeItem $marqueeItem)
+    {
+        $marqueeItem->delete();
+        return back()->with('success', 'Item marquee dihapus.');
     }
 }

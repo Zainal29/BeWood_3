@@ -77,15 +77,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
         'destroy' => 'instagram.destroy',
     ]);
 
-    // Orders
-    Route::resource('orders', OrderController::class)->names([
-        'index' => 'orders.index',
-        'show'  => 'orders.show',
-    ]);
-    Route::get('orders/create-manual', [OrderController::class, 'createManual'])->name('orders.create-manual');
-    Route::post('orders/store-manual', [OrderController::class, 'storeManual'])->name('orders.store-manual');
-    Route::put('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
-
+  // Orders
+Route::resource('orders', OrderController::class)->only(['index', 'show']);
+Route::get('orders/create-manual', [OrderController::class, 'createManual'])->name('orders.create-manual');
+Route::post('orders/store-manual', [OrderController::class, 'storeManual'])->name('orders.store-manual');
+Route::put('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
     // FAQ
     Route::resource('faqs', FaqController::class)->names([
         'index' => 'faqs.index',
@@ -95,12 +91,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
         'update' => 'faqs.update',
         'destroy' => 'faqs.destroy',
     ]);
-    Route::prefix('marquee')->name('marquee.')->group(function () {
-    Route::get('/', [MarqueeController::class, 'index'])->name('index');
-    Route::post('/items', [MarqueeController::class, 'store'])->name('store');
-    Route::put('/items/{item}', [MarqueeController::class, 'update'])->name('update');
-    Route::delete('/items/{item}', [MarqueeController::class, 'destroy'])->name('destroy');
-    });
+   Route::resource('marquee', App\Http\Controllers\Admin\MarqueeController::class)->except(['show', 'create', 'edit'])->names([
+    'index' => 'marquee.index',
+    'store' => 'marquee.store',
+    'update' => 'marquee.update',
+    'destroy' => 'marquee.destroy',
+]);
 });
 
 require __DIR__ . '/auth.php';

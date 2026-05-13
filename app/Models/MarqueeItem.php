@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class MarqueeItem extends Model
 {
     use HasFactory;
-
-    protected $table = 'marquee_items';
-    protected $fillable = ['text', 'icon', 'order', 'is_active'];
-    protected $casts = ['is_active' => 'boolean', 'order' => 'integer'];
+    protected $fillable = ['text', 'order', 'is_active'];
+    protected $casts = ['is_active' => 'boolean'];
 }

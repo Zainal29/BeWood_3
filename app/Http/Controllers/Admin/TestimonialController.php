@@ -9,14 +9,13 @@ use Illuminate\Http\Request;
 
 class TestimonialController extends Controller
 {
-    public function index()
-    {
-        $testimonials = Testimonial::orderBy('order')->get();
-        $title = Setting::where('key', 'testimonials_title')->first()->value ?? 'Kata Mereka';
-        $subtitle = Setting::where('key', 'testimonials_subtitle')->first()->value ?? 'Pengalaman nyata dari keluarga Indonesia yang telah mempercayakan rumah mereka pada BeWood.';
-        return view('admin.testimonials.index', compact('testimonials', 'title', 'subtitle'));
-    }
-
+   public function index()
+{
+    $testimonials = Testimonial::orderBy('order')->paginate(10); // ✅ paginate, not get()
+    $title = Setting::get('testimonials_title', 'Kata Mereka');
+    $subtitle = Setting::get('testimonials_subtitle', 'Pengalaman nyata dari keluarga Indonesia...');
+    return view('admin.testimonials.index', compact('testimonials', 'title', 'subtitle'));
+}
     public function updateSettings(Request $request)
     {
         $request->validate([
