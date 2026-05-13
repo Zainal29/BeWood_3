@@ -41,6 +41,37 @@ class WhyUsController extends Controller
         return redirect()->back()->with('success', 'Item berhasil diperbarui.');
     }
 
+    // Store new item
+public function storeItem(Request $request)
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'required|string',
+        'order' => 'nullable|integer',
+        'is_active' => 'nullable|boolean',
+    ]);
+
+    WhyUsItem::create($request->all());
+
+    return redirect()->route('admin.why-us.index')->with('success', 'Item berhasil ditambahkan.');
+}
+
+// Store new stat
+public function storeStat(Request $request)
+{
+    $request->validate([
+        'label' => 'required|string|max:100',
+        'value' => 'required|string|max:50',
+        'order' => 'nullable|integer',
+        'is_active' => 'nullable|boolean',
+    ]);
+
+    WhyUsStat::create($request->all());
+
+    return redirect()->route('admin.why-us.index')->with('success', 'Statistik berhasil ditambahkan.');
+}
+
+
     public function updateStat(Request $request, WhyUsStat $stat)
     {
         $request->validate([

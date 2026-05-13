@@ -32,6 +32,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     // Why Us Section (Mengapa BeWood?)
+    Route::post('why-us/items', [WhyUsController::class, 'storeItem'])->name('why-us.items.store');
+Route::post('why-us/stats', [WhyUsController::class, 'storeStat'])->name('why-us.stats.store');
     Route::get('why-us', [WhyUsController::class, 'index'])->name('why-us.index');
     Route::put('why-us/settings', [WhyUsController::class, 'updateSettings'])->name('why-us.settings.update');
     Route::put('why-us/items/{item}', [WhyUsController::class, 'updateItem'])->name('why-us.items.update');
