@@ -27,32 +27,23 @@ class DashboardController extends Controller
         // Ambil rating rata-rata dari semua review yang disetujui
         $averageRating = Review::where('is_approved', true)->avg('rating') ?? 4.8;
 
-        // Data untuk chart (7 hari terakhir)
-        $chartLabels = [];
-        $orderCounts = [];
-        $revenueAmounts = [];
+        // Data untuk grafik (7 hari terakhir)
+    $chartLabels = [];
+    $orderCounts = [];
+    $revenueAmounts = [];
 
-        for ($i = 6; $i >= 0; $i--) {
-            $date = now()->subDays($i);
-            $chartLabels[] = $date->translatedFormat('D'); // Sen, Sel, etc.
+    for ($i = 6; $i >= 0; $i--) {
+        $date = now()->subDays($i);
+        $chartLabels[] = $date->translatedFormat('D'); // Sen, Sel, Rab, ...
 
-            $orderCounts[] = Order::whereDate('created_at', $date)->count();
-            $revenueAmounts[] = Order::whereDate('created_at', $date)->sum('total');
-        }
+        $orderCounts[] = Order::whereDate('created_at', $date)->count();
+        $revenueAmounts[] = Order::whereDate('created_at', $date)->sum('total');
+    }
 
-        return view('admin.dashboard', compact(
-            'totalOrders',
-            'totalRevenue',
-            'totalProducts',
-            'totalCustomers',
-            'recentOrders',
-            'deliveredCount',
-            'processingCount',
-            'outOfStockCount',
-            'averageRating',
-            'chartLabels',
-            'orderCounts',
-            'revenueAmounts'
-        ));
+    return view('admin.dashboard', compact(
+        'totalOrders', 'totalRevenue', 'totalProducts', 'totalCustomers',
+        'recentOrders', 'deliveredCount', 'processingCount', 'outOfStockCount',
+        'averageRating', 'chartLabels', 'orderCounts', 'revenueAmounts'
+    ));
     }
 }

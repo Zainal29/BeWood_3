@@ -9,6 +9,7 @@ use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
@@ -27,7 +28,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:products,name',
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|integer|min:0',
             'discount_price' => 'nullable|integer|min:0',
@@ -42,10 +43,15 @@ class ProductController extends Controller
         ]);
 
         $data = $request->all();
-        $data['slug'] = Str::slug($request->name);
+        $slug = Str::slug($request->name);
+        $originalSlug = $slug;
+        $count = 1;
+        while (Product::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $count++;
+        }
+        $data['slug'] = $slug;
         $data['is_active'] = true;
 
-        // Upload gambar utama
         if ($request->hasFile('main_image')) {
             $path = $request->file('main_image')->store('products', 'public');
             $data['main_image'] = $path;
@@ -53,7 +59,6 @@ class ProductController extends Controller
 
         $product = Product::create($data);
 
-        // Upload gambar tambahan
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
                 $path = $image->store('products', 'public');
@@ -67,6 +72,13 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')->with('success', 'Produk berhasil ditambahkan.');
     }
 
+    public function show(Product $product)
+    {
+        // Redirect ke halaman edit karena admin mungkin ingin melihat detail sekaligus edit
+        return redirect()->route('admin.products.edit', $product);
+        // Atau buat view show terpisah: return view('admin.products.show', compact('product'));
+    }
+
     public function edit(Product $product)
     {
         $categories = Category::all();
@@ -76,7 +88,12 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('products')->ignore($product->id),
+            ],
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|integer|min:0',
             'discount_price' => 'nullable|integer|min:0',
@@ -91,9 +108,14 @@ class ProductController extends Controller
         ]);
 
         $data = $request->all();
-        $data['slug'] = Str::slug($request->name);
+        $slug = Str::slug($request->name);
+        $originalSlug = $slug;
+        $count = 1;
+        while (Product::where('slug', $slug)->where('id', '!=', $product->id)->exists()) {
+            $slug = $originalSlug . '-' . $count++;
+        }
+        $data['slug'] = $slug;
 
-        // Upload gambar utama baru
         if ($request->hasFile('main_image')) {
             if ($product->main_image && Storage::disk('public')->exists($product->main_image)) {
                 Storage::disk('public')->delete($product->main_image);
@@ -104,7 +126,6 @@ class ProductController extends Controller
 
         $product->update($data);
 
-        // Upload gambar tambahan baru (tambahan, tidak menghapus yang lama)
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
                 $path = $image->store('products', 'public');
@@ -120,11 +141,9 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        // Hapus gambar utama
         if ($product->main_image && Storage::disk('public')->exists($product->main_image)) {
             Storage::disk('public')->delete($product->main_image);
         }
-        // Hapus semua gambar tambahan
         foreach ($product->images as $image) {
             if (Storage::disk('public')->exists($image->image)) {
                 Storage::disk('public')->delete($image->image);
@@ -136,9 +155,6 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')->with('success', 'Produk berhasil dihapus.');
     }
 
-    /**
-     * Hapus gambar utama via AJAX
-     */
     public function destroyMainImage(Product $product)
     {
         if ($product->main_image && Storage::disk('public')->exists($product->main_image)) {
@@ -149,9 +165,6 @@ class ProductController extends Controller
         return response()->json(['success' => false, 'message' => 'Gambar tidak ditemukan.'], 404);
     }
 
-    /**
-     * Hapus gambar tambahan via AJAX
-     */
     public function destroyImage(ProductImage $image)
     {
         if ($image->image && Storage::disk('public')->exists($image->image)) {

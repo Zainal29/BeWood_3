@@ -1,165 +1,253 @@
+{{-- resources/views/admin/products/create.blade.php --}}
 @extends('admin.layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto">
-    <h1 class="text-2xl font-serif mb-6">Tambah Produk</h1>
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    {{-- Breadcrumb Modern --}}
+    <nav class="flex items-center gap-2 text-sm mb-6">
+        <a href="{{ route('admin.dashboard') }}" class="text-gray-500 hover:text-emerald-600 transition">Dashboard</a>
+        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        <a href="{{ route('admin.products.index') }}" class="text-gray-500 hover:text-emerald-600 transition">Produk</a>
+        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        <span class="text-gray-800 font-medium">Tambah Produk Baru</span>
+    </nav>
 
-    <form method="POST" action="{{ route('admin.products.store') }}" class="bg-white p-6 rounded-xl shadow-sm" enctype="multipart/form-data" id="productForm">
-        @csrf
+    {{-- Header Section --}}
+    <div class="mb-8 flex flex-wrap justify-between items-end gap-4">
+        <div>
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">Tambah Produk</h1>
+            <p class="text-gray-500 mt-1">Lengkapi detail produk untuk koleksi terbaru Anda</p>
+        </div>
+        <a href="{{ route('admin.products.index') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 text-gray-700 bg-white hover:bg-gray-50 transition shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            Kembali ke Daftar
+        </a>
+    </div>
 
-        <div class="grid md:grid-cols-2 gap-6">
-            <!-- Nama Produk -->
-            <div>
-                <label class="block text-sage-700 text-sm font-medium mb-2">Nama Produk</label>
-                <input type="text" name="name" required class="w-full border border-sage-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-sage-300">
-            </div>
-
-            <!-- Kategori -->
-            <div>
-                <label class="block text-sage-700 text-sm font-medium mb-2">Kategori</label>
-                <select name="category_id" required class="w-full border border-sage-200 rounded-lg px-4 py-2">
-                    @foreach ($categories as $cat)
-                        <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <!-- Harga -->
-            <div>
-                <label class="block text-sage-700 text-sm font-medium mb-2">Harga</label>
-                <input type="number" name="price" required class="w-full border border-sage-200 rounded-lg px-4 py-2">
-            </div>
-
-            <!-- Harga Diskon -->
-            <div>
-                <label class="block text-sage-700 text-sm font-medium mb-2">Harga Diskon (opsional)</label>
-                <input type="number" name="discount_price" class="w-full border border-sage-200 rounded-lg px-4 py-2">
-            </div>
-
-            <!-- Stok -->
-            <div>
-                <label class="block text-sage-700 text-sm font-medium mb-2">Stok</label>
-                <input type="number" name="stock" required class="w-full border border-sage-200 rounded-lg px-4 py-2">
-            </div>
-
-            <!-- Gambar Utama dengan preview -->
-            <div>
-                <label class="block text-sage-700 text-sm font-medium mb-2">Gambar Utama</label>
-                <div id="mainImagePreview" class="mb-3 hidden">
-                    <img id="mainPreviewImg" src="#" class="w-32 h-32 object-cover rounded-lg border shadow-sm">
+    {{-- Form Container Premium --}}
+    <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-100/50 overflow-hidden">
+        <form method="POST" action="{{ route('admin.products.store') }}" enctype="multipart/form-data" id="productForm">
+            @csrf
+            <div class="p-6 md:p-8 space-y-8">
+                {{-- Grid 2 kolom untuk informasi dasar --}}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama Produk</label>
+                        <input type="text" name="name" required
+                               class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition outline-none"
+                               placeholder="Contoh: Sofa Kayu Jati">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+                        <select name="category_id" required
+                                class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition outline-none">
+                            <option value="">Pilih Kategori</option>
+                            @foreach($categories as $cat)
+                                <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Harga (Rp)</label>
+                        <input type="number" name="price" required
+                               class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition outline-none"
+                               placeholder="0">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Harga Diskon (Opsional)</label>
+                        <input type="number" name="discount_price"
+                               class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition outline-none"
+                               placeholder="0">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Stok</label>
+                        <input type="number" name="stock" required
+                               class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition outline-none"
+                               placeholder="0">
+                    </div>
                 </div>
-                <input type="file" name="main_image" id="mainImageInput" required accept="image/*" class="w-full text-sm text-sage-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-sage-50 file:text-sage-700 hover:file:bg-sage-100">
+
+                {{-- Deskripsi (full width) --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
+                    <textarea name="description" rows="4"
+                              class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition outline-none"
+                              placeholder="Deskripsikan produk secara detail..."></textarea>
+                </div>
+
+                {{-- Spesifikasi JSON --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Spesifikasi (JSON)</label>
+                    <textarea name="specifications" rows="3"
+                              class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 font-mono text-sm focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition outline-none"
+                              placeholder='{"Material":"Kayu Jati","Dimensi":"180x90cm"}'></textarea>
+                    <p class="text-xs text-gray-400 mt-1">Gunakan format JSON valid</p>
+                </div>
+
+                {{-- Upload Gambar Utama (Drag & Drop) --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Gambar Utama</label>
+                    <div id="mainImageDropzone" class="relative border-2 border-dashed border-gray-200 rounded-2xl p-6 bg-gray-50/30 hover:bg-gray-50/50 transition cursor-pointer group">
+                        <input type="file" name="main_image" id="mainImageInput" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="image/*">
+                        <div class="text-center">
+                            <svg class="mx-auto h-12 w-12 text-gray-400 group-hover:text-emerald-500 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            <p class="mt-2 text-sm text-gray-500">Klik atau seret gambar ke sini</p>
+                            <p class="text-xs text-gray-400">JPG, PNG, maks 2MB</p>
+                        </div>
+                    </div>
+                    <div id="mainImagePreview" class="mt-4 hidden">
+                        <img id="mainPreviewImg" class="w-32 h-32 object-cover rounded-xl shadow-sm border border-gray-200">
+                        <button type="button" id="removeMainImage" class="mt-2 text-red-500 text-sm hover:text-red-700">Hapus</button>
+                    </div>
+                </div>
+
+                {{-- Gambar Tambahan (Multiple) --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Gambar Tambahan</label>
+                    <div id="additionalDropzone" class="relative border-2 border-dashed border-gray-200 rounded-2xl p-6 bg-gray-50/30 hover:bg-gray-50/50 transition cursor-pointer group">
+                        <input type="file" name="images[]" id="additionalImagesInput" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" multiple accept="image/*">
+                        <div class="text-center">
+                            <svg class="mx-auto h-12 w-12 text-gray-400 group-hover:text-emerald-500 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            <p class="mt-2 text-sm text-gray-500">Klik atau seret beberapa gambar</p>
+                            <p class="text-xs text-gray-400">Bisa pilih lebih dari satu</p>
+                        </div>
+                    </div>
+                    <div id="additionalPreviewContainer" class="mt-4 flex flex-wrap gap-3"></div>
+                </div>
+
+                {{-- Checkbox fitur --}}
+                <div class="flex flex-wrap gap-6">
+                    <label class="inline-flex items-center gap-2">
+                        <input type="checkbox" name="is_featured" value="1" class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                        <span class="text-sm text-gray-700">Jadikan Unggulan</span>
+                    </label>
+                    <label class="inline-flex items-center gap-2">
+                        <input type="checkbox" name="is_bestseller" value="1" class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                        <span class="text-sm text-gray-700">Produk Terlaris</span>
+                    </label>
+                    <label class="inline-flex items-center gap-2">
+                        <input type="checkbox" name="is_new" value="1" class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                        <span class="text-sm text-gray-700">Produk Baru</span>
+                    </label>
+                </div>
             </div>
 
-            <!-- Deskripsi -->
-            <div class="col-span-2">
-                <label class="block text-sage-700 text-sm font-medium mb-2">Deskripsi</label>
-                <textarea name="description" rows="4" class="w-full border border-sage-200 rounded-lg px-4 py-2"></textarea>
+            {{-- Tombol Submit --}}
+            <div class="px-6 py-5 bg-gray-50/50 border-t border-gray-100 flex justify-end gap-3">
+                <a href="{{ route('admin.products.index') }}" class="px-6 py-2.5 rounded-xl border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 transition shadow-sm">Batal</a>
+                <button type="submit" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-medium shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
+                    Simpan Produk
+                </button>
             </div>
-
-            <!-- Spesifikasi JSON -->
-            <div class="col-span-2">
-                <label class="block text-sage-700 text-sm font-medium mb-2">Spesifikasi (JSON)</label>
-                <textarea name="specifications" rows="3" class="w-full border border-sage-200 rounded-lg px-4 py-2 font-mono text-sm" placeholder='{"Material":"Kayu Jati","Dimensi":"180x90cm"}'></textarea>
-            </div>
-
-            <!-- Gambar Tambahan dengan preview multiple -->
-            <div class="col-span-2">
-                <label class="block text-sage-700 text-sm font-medium mb-2">Gambar Tambahan (bisa pilih beberapa)</label>
-                <div id="additionalImagesPreview" class="flex flex-wrap gap-3 mb-3"></div>
-                <input type="file" name="images[]" id="additionalImagesInput" multiple accept="image/*" class="w-full text-sm text-sage-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-sage-50 file:text-sage-700 hover:file:bg-sage-100">
-            </div>
-
-            <!-- Checkbox -->
-            <div class="col-span-2 flex gap-6">
-                <label class="inline-flex items-center gap-2"><input type="checkbox" name="is_featured" value="1"> Unggulan</label>
-                <label class="inline-flex items-center gap-2"><input type="checkbox" name="is_bestseller" value="1"> Terlaris</label>
-                <label class="inline-flex items-center gap-2"><input type="checkbox" name="is_new" value="1"> Baru</label>
-            </div>
-        </div>
-
-        <div class="mt-8 flex gap-3">
-            <button type="submit" class="btn-primary px-6 py-2.5 text-sm font-semibold rounded-lg">Simpan Produk</button>
-            <a href="{{ route('admin.products.index') }}" class="btn-outline-sage px-6 py-2.5 text-sm font-semibold rounded-lg">Batal</a>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
-@endsection
 
-@push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Preview gambar utama
-        const mainImageInput = document.getElementById('mainImageInput');
-        const mainPreview = document.getElementById('mainImagePreview');
-        const mainPreviewImg = document.getElementById('mainPreviewImg');
+    // Drag & drop dan preview untuk gambar utama
+    const mainDropzone = document.getElementById('mainImageDropzone');
+    const mainInput = document.getElementById('mainImageInput');
+    const mainPreview = document.getElementById('mainImagePreview');
+    const mainPreviewImg = document.getElementById('mainPreviewImg');
+    const removeMainBtn = document.getElementById('removeMainImage');
 
-        mainImageInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    mainPreviewImg.src = event.target.result;
-                    mainPreview.classList.remove('hidden');
-                };
-                reader.readAsDataURL(file);
-            } else {
-                mainPreview.classList.add('hidden');
-            }
-        });
-
-        // Preview gambar tambahan (multiple)
-        const additionalInput = document.getElementById('additionalImagesInput');
-        const additionalPreview = document.getElementById('additionalImagesPreview');
-
-        additionalInput.addEventListener('change', function(e) {
-            additionalPreview.innerHTML = '';
-            const files = Array.from(e.target.files);
-            files.forEach(file => {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const imgWrapper = document.createElement('div');
-                    imgWrapper.className = 'relative inline-block';
-                    imgWrapper.innerHTML = `
-                        <img src="${event.target.result}" class="w-20 h-20 object-cover rounded-lg border shadow-sm">
-                        <button type="button" class="remove-preview-btn absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center hover:bg-red-600">×</button>
-                    `;
-                    additionalPreview.appendChild(imgWrapper);
-                    // Hapus preview jika tombol × diklik
-                    imgWrapper.querySelector('.remove-preview-btn').addEventListener('click', () => {
-                        imgWrapper.remove();
-                        // Hapus file dari input (tidak bisa langsung, jadi kita rebuild)
-                        const dt = new DataTransfer();
-                        const currentFiles = Array.from(additionalInput.files);
-                        const remainingFiles = currentFiles.filter(f => f.name !== file.name);
-                        remainingFiles.forEach(f => dt.items.add(f));
-                        additionalInput.files = dt.files;
-                    });
-                };
-                reader.readAsDataURL(file);
-            });
-        });
-
-        // SweetAlert untuk error validasi
-        @if($errors->any())
-            Swal.fire({
-                icon: 'error',
-                title: 'Validasi Gagal',
-                html: '<ul class="text-left">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>',
-                confirmButtonColor: '#b91c1c'
-            });
-        @endif
-
-        @if(session('success'))
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: "{{ session('success') }}",
-                confirmButtonColor: '#5f7e5f',
-                timer: 3000,
-                showConfirmButton: false
-            });
-        @endif
+    mainInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                mainPreviewImg.src = ev.target.result;
+                mainPreview.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
     });
+    removeMainBtn?.addEventListener('click', function() {
+        mainInput.value = '';
+        mainPreview.classList.add('hidden');
+        mainPreviewImg.src = '';
+    });
+
+    // Drag & drop untuk gambar tambahan
+    const additionalInput = document.getElementById('additionalImagesInput');
+    const additionalContainer = document.getElementById('additionalPreviewContainer');
+
+    additionalInput.addEventListener('change', function(e) {
+        additionalContainer.innerHTML = '';
+        const files = Array.from(e.target.files);
+        files.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'relative group';
+                wrapper.innerHTML = `
+                    <img src="${ev.target.result}" class="w-20 h-20 object-cover rounded-xl border border-gray-200 shadow-sm">
+                    <button type="button" class="remove-preview absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600">×</button>
+                `;
+                additionalContainer.appendChild(wrapper);
+                wrapper.querySelector('.remove-preview').addEventListener('click', () => {
+                    wrapper.remove();
+                    // Hapus file dari input (re-build)
+                    const dt = new DataTransfer();
+                    const currentFiles = Array.from(additionalInput.files);
+                    const remaining = currentFiles.filter(f => f.name !== file.name);
+                    remaining.forEach(f => dt.items.add(f));
+                    additionalInput.files = dt.files;
+                });
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+
+    // Efek drag over
+    [mainDropzone, document.getElementById('additionalDropzone')].forEach(zone => {
+        zone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            zone.classList.add('border-emerald-400', 'bg-emerald-50/30');
+        });
+        zone.addEventListener('dragleave', () => {
+            zone.classList.remove('border-emerald-400', 'bg-emerald-50/30');
+        });
+        zone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            zone.classList.remove('border-emerald-400', 'bg-emerald-50/30');
+            const input = zone.querySelector('input[type="file"]');
+            if (input) input.files = e.dataTransfer.files;
+            input.dispatchEvent(new Event('change'));
+        });
+    });
+
+    // SweetAlert untuk sukses/gagal dari session
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: "{{ session('success') }}",
+            background: 'rgba(0,0,0,0.8)',
+            backdrop: `
+                rgba(0,0,0,0.4)
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E")
+                center
+                no-repeat
+            `,
+            color: '#fff',
+            confirmButtonColor: '#10b981',
+            timer: 3000
+        });
+    @endif
+    @if($errors->any())
+        Swal.fire({
+            icon: 'error',
+            title: 'Validasi Gagal',
+            html: '<ul class="text-left">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>',
+            background: 'rgba(0,0,0,0.85)',
+            color: '#fff',
+            confirmButtonColor: '#ef4444'
+        });
+    @endif
 </script>
-@endpush
+@endsection

@@ -1,4 +1,4 @@
-<a id="wa-btn" href="https://wa.me/6281234567890?text=Halo%20BeWood%2C%20saya%20tertarik%20dengan%20produk%20Anda"
+<a id="wa-btn" href="https://wa.me/6283129463988?text=Halo%20BeWood%2C%20saya%20tertarik%20dengan%20produk%20Anda"
    target="_blank" rel="noopener"
    class="fixed bottom-6 right-6 z-40 w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center"
    aria-label="Chat WhatsApp">
