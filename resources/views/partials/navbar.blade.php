@@ -33,22 +33,6 @@
                 <span id="cart-badge" class="hidden absolute -top-1 -right-1 bg-sage-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
             </button>
 
-            @auth
-            <div class="relative group hidden md:block">
-                <button class="transition-colors p-2 rounded-full">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
-                </button>
-                <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden group-hover:block z-50">
-                    <a href="#" class="block px-4 py-2 text-sm text-sage-700 hover:bg-sage-50">Profil</a>
-                    <form method="POST" action="{{ route('logout') }}">@csrf<button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-sage-50">Logout</button></form>
-                </div>
-            </div>
-            @else
-            <a href="{{ route('login') }}" class="transition-colors p-2 rounded-full hidden md:flex">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
-            </a>
-            @endauth
-
             <div class="theme-toggle ml-1 hidden md:block" id="theme-toggle" onclick="toggleTheme()"></div>
             <button id="mobile-menu-btn" class="md:hidden transition-colors p-2 rounded-full">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
@@ -60,16 +44,6 @@
         @foreach($navMenus as $item)
         <a href="{{ url($item->url) }}" class="block text-sm font-medium text-sage-800 tracking-wide hover:text-sage-500 py-2">{{ $item->label }}</a>
         @endforeach
-        @auth
-        <div class="pt-3 border-t border-sage-200">
-            <form method="POST" action="{{ route('logout') }}">@csrf<button type="submit" class="block w-full text-left text-sm text-red-600 hover:text-red-700 py-2">Logout</button></form>
-        </div>
-        @else
-        <div class="pt-3 border-t border-sage-200">
-            <a href="{{ route('login') }}" class="block text-sm text-sage-800 hover:text-sage-500 py-2">Login</a>
-            <a href="{{ route('register') }}" class="block text-sm text-sage-800 hover:text-sage-500 py-2">Register</a>
-        </div>
-        @endauth
     </div>
 </nav>
 
@@ -80,7 +54,6 @@
 
         function updateNavbarTheme() {
             if (!isHomePage) {
-                // Halaman lain: putih solid dengan teks gelap
                 navbar.style.background = '#ffffff';
                 navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
                 navbar.style.backdropFilter = 'none';
@@ -89,16 +62,13 @@
                 return;
             }
 
-            // Halaman beranda: tergantung scroll
             if (window.scrollY > 50) {
-                // Scrolled: putih solid, teks gelap
                 navbar.style.background = '#ffffff';
                 navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
                 navbar.style.backdropFilter = 'none';
                 document.body.classList.add('home-scrolled');
                 document.body.classList.remove('home-top');
             } else {
-                // Top: transparan dengan blur, teks putih
                 navbar.style.background = 'rgba(0, 0, 0, 0.25)';
                 navbar.style.backdropFilter = 'blur(10px)';
                 navbar.style.boxShadow = 'none';
@@ -111,10 +81,9 @@
             window.addEventListener('scroll', updateNavbarTheme);
             updateNavbarTheme();
         } else {
-            updateNavbarTheme(); // langsung putih solid
+            updateNavbarTheme();
         }
 
-        // Mobile menu toggle
         const mobileBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
         if (mobileBtn && mobileMenu) {
@@ -126,7 +95,6 @@
 </script>
 
 <style>
-    /* Default transition */
     #navbar .nav-logo,
     #navbar ul li a,
     #navbar .flex button:not(.theme-toggle),
@@ -134,7 +102,7 @@
         transition: all 0.2s ease;
     }
 
-    /* ==================== Halaman lain (non-home) ==================== */
+    /* Halaman lain (non-home) */
     body.non-home-navbar #navbar .nav-logo,
     body.non-home-navbar #navbar ul li a,
     body.non-home-navbar #navbar .flex button:not(.theme-toggle),
@@ -159,7 +127,7 @@
         background-color: #6b8f6e;
     }
 
-    /* ==================== Halaman beranda - posisi atas (transparan) ==================== */
+    /* Beranda - atas (transparan) */
     body.home-top #navbar .nav-logo,
     body.home-top #navbar ul li a,
     body.home-top #navbar .flex button:not(.theme-toggle),
@@ -184,7 +152,7 @@
         background-color: #d4e0d4;
     }
 
-    /* ==================== Halaman beranda - discroll (putih solid teks gelap) ==================== */
+    /* Beranda - discroll (putih solid teks gelap) */
     body.home-scrolled #navbar .nav-logo,
     body.home-scrolled #navbar ul li a,
     body.home-scrolled #navbar .flex button:not(.theme-toggle),

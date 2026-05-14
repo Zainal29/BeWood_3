@@ -101,7 +101,9 @@ Route::put('orders/{order}/status', [OrderController::class, 'updateStatus'])->n
         'update' => 'faqs.update',
         'destroy' => 'faqs.destroy',
     ]);
-   Route::resource('marquee', App\Http\Controllers\Admin\MarqueeController::class)->except(['show', 'create', 'edit'])->names([
+
+    // Marquee
+Route::resource('marquee', App\Http\Controllers\Admin\MarqueeController::class)->names([
     'index' => 'marquee.index',
     'store' => 'marquee.store',
     'update' => 'marquee.update',

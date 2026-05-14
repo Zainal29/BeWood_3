@@ -23,6 +23,7 @@
                 <thead class="bg-sage-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-sans font-semibold text-sage-600 uppercase tracking-wider">#</th>
+                        <th class="px-6 py-3 text-left text-xs font-sans font-semibold text-sage-600 uppercase tracking-wider">Gambar</th>
                         <th class="px-6 py-3 text-left text-xs font-sans font-semibold text-sage-600 uppercase tracking-wider">Nama</th>
                         <th class="px-6 py-3 text-left text-xs font-sans font-semibold text-sage-600 uppercase tracking-wider">Slug</th>
                         <th class="px-6 py-3 text-left text-xs font-sans font-semibold text-sage-600 uppercase tracking-wider">Kategori Induk</th>
@@ -34,6 +35,17 @@
                     @forelse ($categories as $category)
                     <tr class="hover:bg-sage-50/50 transition">
                         <td class="px-6 py-4 text-sm text-sage-500">{{ $loop->iteration }}</td>
+                        <td class="px-6 py-4">
+    @if ($category->image)
+        <img src="{{ Storage::url($category->image) }}" class="w-12 h-12 rounded-lg object-cover shadow-sm">
+    @else
+        <div class="w-12 h-12 bg-sage-100 rounded-lg flex items-center justify-center text-sage-400">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+        </div>
+    @endif
+
                         <td class="px-6 py-4 font-medium text-sage-800">{{ $category->name }}</td>
                         <td class="px-6 py-4 text-sage-500">{{ $category->slug }}</td>
                         <td class="px-6 py-4 text-sage-500">{{ $category->parent?->name ?? '-' }}</td>
@@ -48,23 +60,26 @@
                                 </span>
                             @endif
                         </td>
+
+
                         <td class="px-6 py-4">
-                            <div class="flex items-center gap-2">
-                                <a href="{{ route('admin.categories.edit', $category) }}" class="text-sage-500 hover:text-sage-700 p-1.5 rounded-md hover:bg-sage-100 transition bg-transparent" aria-label="Edit">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
-                                    </svg>
-                                </a>
-                                <button type="button" class="text-red-500 hover:text-red-700 p-1.5 rounded-md hover:bg-red-100 transition bg-transparent" data-id="{{ $category->id }}" data-name="{{ $category->name }}">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                    </svg>
-                                </button>
-                                <form id="delete-category-{{ $category->id }}" action="{{ route('admin.categories.destroy', $category) }}" method="POST" class="hidden">
-                                    @csrf @method('DELETE')
-                                </form>
-                            </div>
-                        </td>
+    <div class="flex items-center gap-2">
+        <a href="{{ route('admin.categories.edit', $category) }}" class="text-sage-500 hover:text-sage-700 p-1.5 rounded-md hover:bg-sage-100 transition bg-transparent" aria-label="Edit">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
+            </svg>
+        </a>
+        <button type="button" class="delete-category-btn text-red-500 hover:text-red-700 p-1.5 rounded-md hover:bg-red-100 transition bg-transparent"
+                data-id="{{ $category->id }}" data-name="{{ $category->name }}">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+            </svg>
+        </button>
+        <form id="delete-category-{{ $category->id }}" action="{{ route('admin.categories.destroy', $category) }}" method="POST" class="hidden">
+            @csrf @method('DELETE')
+        </form>
+    </div>
+</td>
                     </tr>
                     @empty
                     <tr>
@@ -91,37 +106,46 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const deleteButtons = document.querySelectorAll('.delete-category-btn');
-        deleteButtons.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const categoryId = this.dataset.id;
-                const categoryName = this.dataset.name;
+        const imageInput = document.getElementById('imageInput');
+        const previewImg = document.getElementById('previewImg');
+        const newPreviewDiv = document.getElementById('newImagePreview');
+        const currentContainer = document.getElementById('currentImageContainer');
+        const removeBtn = document.getElementById('removeImageBtn');
+        const removeInput = document.getElementById('removeImageInput');
+        const noImageText = document.getElementById('noImageText');
 
-                Swal.fire({
-                    title: 'Hapus Kategori?',
-                    html: `Anda yakin ingin menghapus <strong>${categoryName}</strong>?<br>Produk dalam kategori ini akan kehilangan kategori.`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#b91c1c',
-                    cancelButtonColor: '#5f7e5f',
-                    confirmButtonText: 'Ya, hapus!',
-                    cancelButtonText: 'Batal',
-                    background: '#fff',
-                    customClass: {
-                        popup: 'rounded-xl shadow-xl',
-                        title: 'font-serif text-xl',
-                        htmlContainer: 'font-sans text-sage-600',
-                        confirmButton: 'px-5 py-2 text-sm font-medium rounded-lg',
-                        cancelButton: 'px-5 py-2 text-sm font-medium rounded-lg'
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        document.getElementById(`delete-category-${categoryId}`).submit();
-                    }
-                });
+        if (imageInput) {
+            imageInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        previewImg.src = event.target.result;
+                        previewImg.classList.remove('hidden');
+                        if (currentContainer) currentContainer.classList.add('hidden');
+                        if (noImageText) noImageText.classList.add('hidden');
+                        newPreviewDiv.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    previewImg.classList.add('hidden');
+                    if (currentContainer) currentContainer.classList.remove('hidden');
+                    if (noImageText) noImageText.classList.remove('hidden');
+                    newPreviewDiv.classList.add('hidden');
+                }
             });
-        });
+        }
+
+        if (removeBtn && removeInput) {
+            removeBtn.addEventListener('click', function() {
+                removeInput.value = '1';
+                if (currentContainer) currentContainer.classList.add('hidden');
+                previewImg.classList.add('hidden');
+                if (imageInput) imageInput.value = '';
+                if (noImageText) noImageText.classList.remove('hidden');
+                newPreviewDiv.classList.add('hidden');
+            });
+        }
     });
 </script>
 @endpush

@@ -21,16 +21,16 @@ class MarqueeController extends Controller
         return back()->with('success', 'Item marquee berhasil ditambahkan.');
     }
 
-    public function update(Request $request, MarqueeItem $marqueeItem)
+    public function update(Request $request, MarqueeItem $marquee)
     {
         $request->validate(['text' => 'required|string|max:255']);
-        $marqueeItem->update($request->only('text', 'order', 'is_active'));
+        $marquee->update($request->only('text', 'order', 'is_active'));
         return back()->with('success', 'Item marquee diperbarui.');
     }
 
-    public function destroy(MarqueeItem $marqueeItem)
+    public function destroy(MarqueeItem $marquee)
     {
-        $marqueeItem->delete();
+        $marquee->delete();
         return back()->with('success', 'Item marquee dihapus.');
     }
 }
