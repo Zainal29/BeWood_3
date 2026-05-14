@@ -30,7 +30,7 @@ class LandingController extends Controller
                   ->orWhere('is_new', true);
             })
             ->orderBy('created_at', 'desc')
-            ->paginate(8);
+            ->limit(4)->get();
 
         // Testimonials
         $testimonials = Testimonial::where('is_active', true)

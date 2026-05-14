@@ -38,9 +38,10 @@
             @endforeach
         </div>
 
-        <div class="text-center mt-12 reveal">
+        {{-- HAPUS bagian pagination ini --}}
+        {{-- <div class="text-center mt-12 reveal">
             {{ $products->appends(request()->query())->links() }}
-        </div>
+        </div> --}}
     </div>
 </section>
 
