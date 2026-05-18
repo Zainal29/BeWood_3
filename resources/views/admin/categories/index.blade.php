@@ -26,7 +26,6 @@
                         <th class="px-6 py-3 text-left text-xs font-sans font-semibold text-sage-600 uppercase tracking-wider">Gambar</th>
                         <th class="px-6 py-3 text-left text-xs font-sans font-semibold text-sage-600 uppercase tracking-wider">Nama</th>
                         <th class="px-6 py-3 text-left text-xs font-sans font-semibold text-sage-600 uppercase tracking-wider">Slug</th>
-                        <th class="px-6 py-3 text-left text-xs font-sans font-semibold text-sage-600 uppercase tracking-wider">Kategori Induk</th>
                         <th class="px-6 py-3 text-left text-xs font-sans font-semibold text-sage-600 uppercase tracking-wider">Status</th>
                         <th class="px-6 py-3 text-left text-xs font-sans font-semibold text-sage-600 uppercase tracking-wider">Aksi</th>
                     </tr>
@@ -48,7 +47,6 @@
 
                         <td class="px-6 py-4 font-medium text-sage-800">{{ $category->name }}</td>
                         <td class="px-6 py-4 text-sage-500">{{ $category->slug }}</td>
-                        <td class="px-6 py-4 text-sage-500">{{ $category->parent?->name ?? '-' }}</td>
                         <td class="px-6 py-4">
                             @if ($category->is_active)
                                  <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
@@ -105,47 +103,68 @@
 
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const imageInput = document.getElementById('imageInput');
-        const previewImg = document.getElementById('previewImg');
-        const newPreviewDiv = document.getElementById('newImagePreview');
-        const currentContainer = document.getElementById('currentImageContainer');
-        const removeBtn = document.getElementById('removeImageBtn');
-        const removeInput = document.getElementById('removeImageInput');
-        const noImageText = document.getElementById('noImageText');
+document.addEventListener('DOMContentLoaded', function() {
+    // ===== Image Preview Logic (existing) =====
+    const imageInput = document.getElementById('imageInput');
+    const previewImg = document.getElementById('previewImg');
+    const newPreviewDiv = document.getElementById('newImagePreview');
+    const currentContainer = document.getElementById('currentImageContainer');
+    const removeBtn = document.getElementById('removeImageBtn');
+    const removeInput = document.getElementById('removeImageInput');
+    const noImageText = document.getElementById('noImageText');
 
-        if (imageInput) {
-            imageInput.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(event) {
-                        previewImg.src = event.target.result;
-                        previewImg.classList.remove('hidden');
-                        if (currentContainer) currentContainer.classList.add('hidden');
-                        if (noImageText) noImageText.classList.add('hidden');
-                        newPreviewDiv.classList.remove('hidden');
-                    };
-                    reader.readAsDataURL(file);
-                } else {
-                    previewImg.classList.add('hidden');
-                    if (currentContainer) currentContainer.classList.remove('hidden');
-                    if (noImageText) noImageText.classList.remove('hidden');
-                    newPreviewDiv.classList.add('hidden');
+    if (imageInput) {
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    previewImg.src = event.target.result;
+                    previewImg.classList.remove('hidden');
+                    if (currentContainer) currentContainer.classList.add('hidden');
+                    if (noImageText) noImageText.classList.add('hidden');
+                    newPreviewDiv.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    if (removeBtn && removeInput) {
+        removeBtn.addEventListener('click', function() {
+            removeInput.value = '1';
+            if (currentContainer) currentContainer.classList.add('hidden');
+            previewImg.classList.add('hidden');
+            if (imageInput) imageInput.value = '';
+            if (noImageText) noImageText.classList.remove('hidden');
+            newPreviewDiv.classList.add('hidden');
+        });
+    }
+
+    // ===== DELETE CATEGORY LOGIC (NEW) =====
+    document.querySelectorAll('.delete-category-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const name = this.dataset.name;
+
+            // SweetAlert confirmation
+            Swal.fire({
+                title: 'Hapus Kategori?',
+                text: `Kategori "${name}" akan dihapus permanen!`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc2626',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit form delete
+                    document.getElementById(`delete-category-${id}`).submit();
                 }
             });
-        }
-
-        if (removeBtn && removeInput) {
-            removeBtn.addEventListener('click', function() {
-                removeInput.value = '1';
-                if (currentContainer) currentContainer.classList.add('hidden');
-                previewImg.classList.add('hidden');
-                if (imageInput) imageInput.value = '';
-                if (noImageText) noImageText.classList.remove('hidden');
-                newPreviewDiv.classList.add('hidden');
-            });
-        }
+        });
     });
+});
 </script>
 @endpush

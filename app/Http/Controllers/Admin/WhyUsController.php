@@ -21,66 +21,83 @@ class WhyUsController extends Controller
     public function updateSettings(Request $request)
     {
         $request->validate([
-            'title' => 'nullable|string',
-            'subtitle' => 'nullable|string',
+            'title' => 'nullable|string|max:255',
+            'subtitle' => 'nullable|string|max:255',
         ]);
+
         WhyUsSetting::updateOrCreate(['key' => 'title'], ['value' => $request->title]);
         WhyUsSetting::updateOrCreate(['key' => 'subtitle'], ['value' => $request->subtitle]);
+
         return redirect()->back()->with('success', 'Pengaturan berhasil diperbarui.');
     }
 
     public function updateItem(Request $request, WhyUsItem $item)
     {
         $request->validate([
-            'title' => 'required|string',
+            'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'order' => 'integer',
-            'is_active' => 'boolean',
+            'icon' => 'nullable|string|max:255',
+            'order' => 'nullable|integer',
+            'is_active' => 'nullable|boolean',
         ]);
-        $item->update($request->only(['title', 'description', 'order', 'is_active']));
+
+        $item->update($request->only(['title', 'description', 'icon', 'order', 'is_active']));
+
         return redirect()->back()->with('success', 'Item berhasil diperbarui.');
     }
 
-    // Store new item
-public function storeItem(Request $request)
-{
-    $request->validate([
-        'title' => 'required|string|max:255',
-        'description' => 'required|string',
-        'order' => 'nullable|integer',
-        'is_active' => 'nullable|boolean',
-    ]);
+    public function storeItem(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'icon' => 'nullable|string|max:255',
+            'order' => 'nullable|integer',
+            'is_active' => 'nullable|boolean',
+        ]);
 
-    WhyUsItem::create($request->all());
+        WhyUsItem::create($request->all());
 
-    return redirect()->route('admin.why-us.index')->with('success', 'Item berhasil ditambahkan.');
-}
+        return redirect()->route('admin.why-us.index')->with('success', 'Item berhasil ditambahkan.');
+    }
 
-// Store new stat
-public function storeStat(Request $request)
-{
-    $request->validate([
-        'label' => 'required|string|max:100',
-        'value' => 'required|string|max:50',
-        'order' => 'nullable|integer',
-        'is_active' => 'nullable|boolean',
-    ]);
-
-    WhyUsStat::create($request->all());
-
-    return redirect()->route('admin.why-us.index')->with('success', 'Statistik berhasil ditambahkan.');
-}
-
+    public function destroyItem(WhyUsItem $item)
+    {
+        $item->delete();
+        return redirect()->route('admin.why-us.index')->with('success', 'Item berhasil dihapus.');
+    }
 
     public function updateStat(Request $request, WhyUsStat $stat)
     {
         $request->validate([
-            'label' => 'required|string',
-            'value' => 'required|string',
-            'order' => 'integer',
-            'is_active' => 'boolean',
+            'label' => 'required|string|max:100',
+            'value' => 'required|string|max:50',
+            'order' => 'nullable|integer',
+            'is_active' => 'nullable|boolean',
         ]);
+
         $stat->update($request->only(['label', 'value', 'order', 'is_active']));
+
         return redirect()->back()->with('success', 'Statistik berhasil diperbarui.');
+    }
+
+    public function storeStat(Request $request)
+    {
+        $request->validate([
+            'label' => 'required|string|max:100',
+            'value' => 'required|string|max:50',
+            'order' => 'nullable|integer',
+            'is_active' => 'nullable|boolean',
+        ]);
+
+        WhyUsStat::create($request->all());
+
+        return redirect()->route('admin.why-us.index')->with('success', 'Statistik berhasil ditambahkan.');
+    }
+
+    public function destroyStat(WhyUsStat $stat)
+    {
+        $stat->delete();
+        return redirect()->route('admin.why-us.index')->with('success', 'Statistik berhasil dihapus.');
     }
 }

@@ -357,172 +357,78 @@
 }
 #navbar.scrolled .nav-logo { font-size: 1.375rem; }
 
-//* =====================================================
-   ADMIN SIDEBAR (FIXED, TIDAK BISA COLLAPSE)
+/* =====================================================
+   ADMIN LAYOUT MODERN (Topbar + Sidebar)
    ===================================================== */
 
-.sidebar {
+/* Sidebar styling */
+.admin-sidebar {
     width: 270px;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    background: #ffffff;
     border-right: 1px solid #e2e8f0;
-    box-shadow: 0 10px 35px rgba(15, 23, 42, 0.05);
-    z-index: 1000;
+    transition: all 0.3s ease;
 }
 
-.main-content {
-    margin-left: 270px;
-    width: calc(100% - 270px);
-    min-height: 100vh;
-    background: #f1f5f9;
-    overflow-x: hidden;
+/* Sidebar menu item */
+.admin-sidebar .menu-item {
+    transition: all 0.2s ease;
+    border-radius: 0.75rem;
+    margin: 0.25rem 0;
 }
 
-/* Header */
-header {
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(14px);
-    border-bottom: 1px solid #e2e8f0;
-    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
-}
-
-/* Menu Item */
-.menu-item {
-    border-radius: 16px;
-    color: #475569;
-    transition: all 0.22s ease;
-}
-
-.menu-item:hover {
+.admin-sidebar .menu-item:hover {
     background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
     color: #059669;
     transform: translateX(4px);
 }
 
-.menu-item.active {
+.admin-sidebar .menu-item.active {
     background: linear-gradient(135deg, #10b981, #059669);
     color: white !important;
-    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.25);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
 }
 
-.menu-item.active svg {
-    color: white;
+.admin-sidebar .menu-item.active svg {
+    color: white !important;
 }
 
-.menu-item svg {
+.admin-sidebar .menu-item svg {
     transition: transform 0.2s ease;
 }
 
-.menu-item:hover svg {
+.admin-sidebar .menu-item:hover svg {
     transform: scale(1.08);
 }
 
-/* Logo */
-.logo-wrapper {
+/* Topbar */
+.admin-topbar {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
     border-bottom: 1px solid #e2e8f0;
 }
 
-.logo-wrapper span {
-    color: #0f172a;
-}
-
-.logo-wrapper p {
-    color: #10b981;
-}
-
-/* Profile Avatar */
-.profile-avatar {
-    background: linear-gradient(135deg, #10b981, #059669);
-    color: white;
-    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.18);
-}
-
-.profile-info p:first-child {
-    color: #0f172a;
-}
-
-.profile-info p:last-child {
-    color: #64748b;
-}
-
-/* Search Input */
-header input {
+/* Main content margin */
+.admin-main-content {
+    margin-left: 270px;
+    min-height: 100vh;
     background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    color: #0f172a;
-    border-radius: 14px;
 }
 
-header input::placeholder {
-    color: #94a3b8;
-}
-
-header input:focus {
-    border-color: #10b981;
-    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
-    background: white;
-}
-
-/* Card Admin */
-.main-content .bg-white {
-    background: white !important;
-    border: 1px solid #e2e8f0;
-    border-radius: 22px;
-    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
-}
-
-/* Text */
-.main-content .text-slate-800 { color: #0f172a !important; }
-.main-content .text-slate-600,
-.main-content .text-slate-500,
-.main-content .text-slate-400 { color: #64748b !important; }
-
-/* Border */
-.main-content .border-slate-200 { border-color: #e2e8f0 !important; }
-
-/* Scrollbar */
-.sidebar::-webkit-scrollbar {
-    width: 5px;
-}
-.sidebar::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 999px;
-}
-
-/* Responsive Mobile (sidebar jadi overlay) */
+/* Responsive */
 @media (max-width: 1024px) {
-    .sidebar {
+    .admin-sidebar {
         position: fixed;
         left: -270px;
         top: 0;
-        z-index: 999;
+        z-index: 50;
+        height: 100vh;
         transition: left 0.3s ease;
     }
-    .sidebar.open {
+    .admin-sidebar.open {
         left: 0;
     }
-    .main-content {
+    .admin-main-content {
         margin-left: 0 !important;
-        width: 100% !important;
-    }
-}
-/* Responsive */
-@media (max-width: 1024px) {
-    .sidebar {
-        left: calc(var(--sidebar-width) * -1);
-    }
-    .sidebar.open {
-        left: 0;
-    }
-    .main-content,
-    .main-expanded {
-        margin-left: 0 !important;
-        width: 100% !important;
     }
 }
 
@@ -533,4 +439,68 @@ header input:focus {
     border: 1px solid #e2e8f0;
     border-radius: 22px;
     box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+}
+
+/* =====================================================
+   MARQUEE HORIZONTAL (UNTUK RUNNING TEXT & INSTAGRAM FEED)
+   ===================================================== */
+
+/* Animasi marquee horizontal dengan duplikasi konten */
+.marquee-track {
+    animation: marqueeScroll linear infinite;
+    will-change: transform;
+}
+
+@keyframes marqueeScroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* Pause animasi saat container di-hover */
+.marquee-container:hover .marquee-track,
+.group\/marquee:hover .marquee-track {
+    animation-play-state: paused;
+}
+
+/* Gradient overlay untuk efek fade di tepi (opsional, warna bisa disesuaikan) */
+.marquee-gradient-left {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 80px;
+    pointer-events: none;
+    z-index: 10;
+    background: linear-gradient(to right, var(--gradient-start, transparent), transparent);
+}
+
+.marquee-gradient-right {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 80px;
+    pointer-events: none;
+    z-index: 10;
+    background: linear-gradient(to left, var(--gradient-start, transparent), transparent);
+}
+
+/* Khusus untuk marquee di footer atau area dengan latar sage-700 */
+.bg-sage-700 .marquee-gradient-left {
+    --gradient-start: #385438;
+}
+.bg-sage-700 .marquee-gradient-right {
+    --gradient-start: #385438;
+}
+
+/* Khusus untuk Instagram feed dengan latar putih */
+.bg-white .marquee-gradient-left {
+    --gradient-start: #ffffff;
+}
+.bg-white .marquee-gradient-right {
+    --gradient-start: #ffffff;
 }

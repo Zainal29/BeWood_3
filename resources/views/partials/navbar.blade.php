@@ -3,7 +3,7 @@
     $isHomePage = request()->routeIs('landing');
 @endphp
 
-<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4 md:py-5">
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4 md:py-5 {{ $isHomePage ? '' : 'scrolled' }}">
     <div class="max-w-7xl mx-auto flex items-center justify-between px-6 lg:px-8">
         <a href="{{ route('landing') }}" class="nav-logo font-serif text-2xl tracking-widest font-light transition-all duration-300">
             Be<span class="{{ $isHomePage ? 'text-sage-300' : 'text-sage-500' }}">Wood</span>
@@ -21,9 +21,9 @@
         </ul>
 
         <div class="flex items-center gap-3">
-            <button id="search-btn" class="transition-colors p-2 rounded-full">
+            {{-- <button id="search-btn" class="transition-colors p-2 rounded-full">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
-            </button>
+            </button> --}}
             <button id="wishlist-btn" class="relative transition-colors p-2 rounded-full">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
                 <span id="wishlist-badge" class="hidden absolute -top-1 -right-1 bg-gold text-charcoal text-[10px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
@@ -33,12 +33,14 @@
                 <span id="cart-badge" class="hidden absolute -top-1 -right-1 bg-sage-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
             </button>
 
-            <div class="theme-toggle ml-1 hidden md:block" id="theme-toggle" onclick="toggleTheme()"></div>
+            {{-- <div class="theme-toggle ml-1 hidden md:block" id="theme-toggle" onclick="toggleTheme()"></div>
             <button id="mobile-menu-btn" class="md:hidden transition-colors p-2 rounded-full">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
             </button>
-        </div>
+        </div> --}}
     </div>
+
+
 
     <div id="mobile-menu" class="hidden md:hidden mt-3 bg-white/95 backdrop-blur-md border border-sage-200 px-6 py-4 space-y-3 rounded-lg shadow-lg mx-6">
         @foreach($navMenus as $item)
@@ -50,10 +52,11 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const navbar = document.getElementById('navbar');
-        const isHomePage = {{ request()->routeIs('landing') ? 'true' : 'false' }};
+        const isHomePage = {{ $isHomePage ? 'true' : 'false' }};
 
         function updateNavbarTheme() {
             if (!isHomePage) {
+                // Halaman selain beranda: langsung putih solid, teks gelap
                 navbar.style.background = '#ffffff';
                 navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
                 navbar.style.backdropFilter = 'none';
@@ -62,6 +65,7 @@
                 return;
             }
 
+            // Halaman beranda: tergantung scroll
             if (window.scrollY > 50) {
                 navbar.style.background = '#ffffff';
                 navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
@@ -81,7 +85,7 @@
             window.addEventListener('scroll', updateNavbarTheme);
             updateNavbarTheme();
         } else {
-            updateNavbarTheme();
+            updateNavbarTheme(); // langsung putih solid
         }
 
         const mobileBtn = document.getElementById('mobile-menu-btn');
@@ -95,6 +99,7 @@
 </script>
 
 <style>
+    /* Default transition */
     #navbar .nav-logo,
     #navbar ul li a,
     #navbar .flex button:not(.theme-toggle),
@@ -102,7 +107,7 @@
         transition: all 0.2s ease;
     }
 
-    /* Halaman lain (non-home) */
+    /* ==================== Halaman lain (non-home) ==================== */
     body.non-home-navbar #navbar .nav-logo,
     body.non-home-navbar #navbar ul li a,
     body.non-home-navbar #navbar .flex button:not(.theme-toggle),
@@ -127,7 +132,7 @@
         background-color: #6b8f6e;
     }
 
-    /* Beranda - atas (transparan) */
+    /* ==================== Halaman beranda - posisi atas (transparan) ==================== */
     body.home-top #navbar .nav-logo,
     body.home-top #navbar ul li a,
     body.home-top #navbar .flex button:not(.theme-toggle),
@@ -152,7 +157,7 @@
         background-color: #d4e0d4;
     }
 
-    /* Beranda - discroll (putih solid teks gelap) */
+    /* ==================== Halaman beranda - discroll (putih solid teks gelap) ==================== */
     body.home-scrolled #navbar .nav-logo,
     body.home-scrolled #navbar ul li a,
     body.home-scrolled #navbar .flex button:not(.theme-toggle),

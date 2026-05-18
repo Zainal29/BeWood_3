@@ -39,7 +39,7 @@
                     <li><a href="{{ route('landing') }}#produk"
                            class="hover:text-sage-300 transition-colors flex items-center gap-2"><span
                                   class="w-1.5 h-1.5 rounded-full bg-sage-500"></span>Ruang Tamu</a></li>
-                    <li><a href="{{ route('landing') }}#produk"
+                    {{-- <li><a href="{{ route('landing') }}#produk"
                            class="hover:text-sage-300 transition-colors flex items-center gap-2"><span
                                   class="w-1.5 h-1.5 rounded-full bg-sage-500"></span>Kamar Tidur</a></li>
                     <li><a href="{{ route('landing') }}#produk"
@@ -50,7 +50,7 @@
                                   class="w-1.5 h-1.5 rounded-full bg-sage-500"></span>Kantor & Studio</a></li>
                     <li><a href="{{ route('landing') }}#produk"
                            class="hover:text-sage-300 transition-colors flex items-center gap-2"><span
-                                  class="w-1.5 h-1.5 rounded-full bg-sage-500"></span>Dekorasi & Aksesoris</a></li>
+                                  class="w-1.5 h-1.5 rounded-full bg-sage-500"></span>Dekorasi & Aksesoris</a></li> --}}
                 </ul>
             </div>
             <div>

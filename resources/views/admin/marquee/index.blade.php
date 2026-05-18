@@ -43,21 +43,25 @@
     <!-- Daftar Item Marquee -->
     <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-slate-200">
+            <table class="w-full divide-y divide-slate-200">
                 <thead class="bg-slate-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Teks</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Urutan</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Aksi</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Teks</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider w-24">Urutan</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider w-32">Status</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider w-28">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-200 bg-white">
                     @forelse($items as $item)
                     <tr class="hover:bg-slate-50 transition">
-                        <td class="px-6 py-4 text-sm font-medium text-slate-800">{{ $item->text }}</td>
-                        <td class="px-6 py-4 text-sm text-slate-600">{{ $item->order }}</td>
-                        <td class="px-6 py-4">
+                        <td class="px-4 py-3 text-sm font-medium text-slate-800">
+                            <div class="max-w-md truncate" title="{{ $item->text }}">
+                                {{ $item->text }}
+                            </div>
+                        </td>
+                        <td class="px-4 py-3 text-sm text-slate-600 text-center">{{ $item->order }}</td>
+                        <td class="px-4 py-3 text-center">
                             @if($item->is_active)
                                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
                                     <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Aktif
@@ -68,21 +72,18 @@
                                 </span>
                             @endif
                         </td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-2">
-                                <!-- Edit button -->
+                        <td class="px-4 py-3 text-center">
+                            <div class="flex items-center justify-center gap-2">
                                 <button type="button" onclick="openEditModal({{ $item->id }}, '{{ addslashes($item->text) }}', {{ $item->order }}, {{ $item->is_active ? 'true' : 'false' }})"
-                                        class="text-sage-500 hover:text-sage-700 p-1.5 rounded-md hover:bg-sage-100 transition bg-transparent">
+                                        class="text-slate-500 hover:text-emerald-600 transition p-1.5 rounded-md hover:bg-slate-100">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
                                     </svg>
                                 </button>
-
-                                <!-- Delete button dengan form terpisah -->
                                 <form method="POST" action="{{ route('admin.marquee.destroy', $item) }}" class="delete-form inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="button" class="delete-btn text-red-500 hover:text-red-700 p-1.5 rounded-md hover:bg-red-100 transition bg-transparent">
+                                    <button type="button" class="delete-btn text-red-500 hover:text-red-700 p-1.5 rounded-md hover:bg-red-100 transition">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                                         </svg>
@@ -93,15 +94,17 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="4" class="px-6 py-12 text-center text-slate-400">Belum ada item marquee. Silakan tambah di atas.</td>
+                        <td colspan="4" class="px-4 py-12 text-center text-slate-400">Belum ada item marquee. Silakan tambah di atas.</td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
+        @if($items->hasPages())
         <div class="px-6 py-4 border-t border-slate-200 bg-white">
             {{ $items->links() }}
         </div>
+        @endif
     </div>
 </div>
 
@@ -129,12 +132,27 @@
                               focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:bg-white transition
                               outline-none">
             </div>
-            <div class="mb-6">
-                <label class="inline-flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" name="is_active" value="1" id="edit_is_active" class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500">
-                    <span class="text-sm text-slate-700">Aktif</span>
-                </label>
-            </div>
+            <div class="flex flex-wrap items-center justify-center gap-6 md:gap-14">
+    <label class="flex gap-3 items-center cursor-pointer">
+        <input type="checkbox" class="hidden peer">
+        <span class="w-5 h-5 border border-slate-300 rounded relative flex items-center justify-center peer-checked:border-blue-600 peer-checked:bg-blue-600">
+            <svg width="11" height="8" viewBox="0 0 11 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="m10.092.952-.005-.006-.006-.005A.45.45 0 0 0 9.43.939L4.162 6.23 1.585 3.636a.45.45 0 0 0-.652 0 .47.47 0 0 0 0 .657l.002.002L3.58 6.958a.8.8 0 0 0 .567.242.78.78 0 0 0 .567-.242l5.333-5.356a.474.474 0 0 0 .044-.65Zm-5.86 5.349V6.3Z" fill="#F5F7FF" stroke="#F5F7FF" stroke-width=".4"/>
+            </svg>
+        </span>
+        <span class="text-gray-700 select-none">Enable Feature</span>
+    </label>
+
+    <label class="flex gap-3 items-center cursor-pointer">
+        <input type="checkbox" checked class="hidden peer">
+        <span class="w-5 h-5 border border-slate-300 rounded relative flex items-center justify-center peer-checked:border-blue-600 peer-checked:bg-blue-600">
+            <svg width="11" height="8" viewBox="0 0 11 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="m10.092.952-.005-.006-.006-.005A.45.45 0 0 0 9.43.939L4.162 6.23 1.585 3.636a.45.45 0 0 0-.652 0 .47.47 0 0 0 0 .657l.002.002L3.58 6.958a.8.8 0 0 0 .567.242.78.78 0 0 0 .567-.242l5.333-5.356a.474.474 0 0 0 .044-.65Zm-5.86 5.349V6.3Z" fill="#F5F7FF" stroke="#F5F7FF" stroke-width=".4"/>
+            </svg>
+        </span>
+        <span class="text-gray-700 select-none">aktif</span>
+    </label>
+</div>
             <div class="flex justify-end gap-3">
                 <button type="button" onclick="closeEditModal()" class="px-4 py-2 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 transition font-medium">Batal</button>
                 <button type="submit" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-medium shadow-sm transition-all hover:shadow-md">Simpan Perubahan</button>
@@ -146,7 +164,6 @@
 
 @push('scripts')
 <script>
-    // Konfirmasi hapus dengan SweetAlert (menggunakan class delete-btn)
     document.querySelectorAll('.delete-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
@@ -161,14 +178,11 @@
                 confirmButtonText: 'Ya, hapus!',
                 cancelButtonText: 'Batal'
             }).then((result) => {
-                if (result.isConfirmed && form) {
-                    form.submit();
-                }
+                if (result.isConfirmed && form) form.submit();
             });
         });
     });
 
-    // Modal edit
     function openEditModal(id, text, order, isActive) {
         const form = document.getElementById('editForm');
         form.action = `/admin/marquee/${id}`;
@@ -180,12 +194,10 @@
     function closeEditModal() {
         document.getElementById('editModal').style.display = 'none';
     }
-    // Tutup modal jika klik luar area putih
     document.getElementById('editModal').addEventListener('click', function(e) {
         if (e.target === this) closeEditModal();
     });
 
-    // SweetAlert notifikasi dari session
     @if(session('success'))
         Swal.fire({ icon: 'success', title: 'Berhasil', text: "{{ session('success') }}", confirmButtonColor: '#10b981', timer: 3000, showConfirmButton: false });
     @endif

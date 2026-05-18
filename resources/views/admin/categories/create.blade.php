@@ -19,17 +19,6 @@
                 @error('name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
 
-            <!-- Kategori Induk -->
-            <div class="mb-4">
-                <label class="block text-sage-700 font-sans text-sm mb-2">Kategori Induk</label>
-                <select name="parent_id" class="w-full px-4 py-2 border border-sage-200 rounded-lg focus:outline-none focus:border-sage-400">
-                    <option value="">Tidak ada (kategori utama)</option>
-                    @foreach ($categories as $cat)
-                        <option value="{{ $cat->id }}" {{ old('parent_id') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
-                    @endforeach
-                </select>
-                @error('parent_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-            </div>
 
             <!-- Gambar dengan preview -->
             <div class="mb-4">

@@ -15,6 +15,7 @@
             </svg>
         </button>
     </div>
+
     <div id="cart-items" class="flex-1 overflow-y-auto px-6 py-4 space-y-4">
         <div id="cart-empty" class="flex flex-col items-center justify-center h-64 text-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-sage-300 mb-4" fill="none"

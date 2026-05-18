@@ -39,6 +39,10 @@ Route::post('why-us/stats', [WhyUsController::class, 'storeStat'])->name('why-us
     Route::put('why-us/items/{item}', [WhyUsController::class, 'updateItem'])->name('why-us.items.update');
     Route::put('why-us/stats/{stat}', [WhyUsController::class, 'updateStat'])->name('why-us.stats.update');
 
+    // TAMBAHKAN INI: Route DELETE untuk hapus item dan stat
+    Route::delete('why-us/items/{item}', [WhyUsController::class, 'destroyItem'])->name('why-us.items.destroy');
+    Route::delete('why-us/stats/{stat}', [WhyUsController::class, 'destroyStat'])->name('why-us.stats.destroy');
+
     // Hero Section Settings
     Route::get('settings', [SettingsController::class, 'edit'])->name('settings.edit');
     Route::put('settings', [SettingsController::class, 'update'])->name('settings.update');

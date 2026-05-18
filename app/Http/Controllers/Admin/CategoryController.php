@@ -5,14 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::with('parent')->paginate(10);
+        $categories = Category::with('parent')->latest()->paginate(10);
         return view('admin.categories.index', compact('categories'));
     }
 
@@ -24,25 +24,25 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255|unique:categories',
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'nullable|string|unique:categories,slug',
             'parent_id' => 'nullable|exists:categories,id',
-            'description' => 'nullable|string',
+            'image' => 'nullable|image|max:2048',
             'is_active' => 'boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
-        $data = $request->all();
-        $data['slug'] = Str::slug($request->name);
+        $validated['slug'] = $validated['slug'] ?? Str::slug($validated['name']);
+        $validated['is_active'] = $request->has('is_active');
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('categories', 'public');
-            $data['image'] = $path;
+            $validated['image'] = $request->file('image')->store('categories', 'public');
         }
 
-        Category::create($data);
+        Category::create($validated);
 
-        return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil ditambahkan.');
+        return redirect()->route('admin.categories.index')
+            ->with('success', 'Kategori berhasil ditambahkan!');
     }
 
     public function edit(Category $category)
@@ -53,56 +53,50 @@ class CategoryController extends Controller
 
     public function update(Request $request, Category $category)
     {
-        $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
-            'parent_id' => 'nullable|exists:categories,id',
-            'description' => 'nullable|string',
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'nullable|string|unique:categories,slug,' . $category->id,
+            'parent_id' => 'nullable|exists:categories,id|not_in:' . $category->id,
+            'image' => 'nullable|image|max:2048',
+            'remove_image' => 'nullable|boolean',
             'is_active' => 'boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
-        $data = $request->all();
-        $data['slug'] = Str::slug($request->name);
+        $validated['is_active'] = $request->has('is_active');
 
-        // Hapus gambar jika user mencentang remove_image
-        if ($request->has('remove_image') && $request->remove_image == 1) {
-            if ($category->image && Storage::disk('public')->exists($category->image)) {
-                Storage::disk('public')->delete($category->image);
+        if ($request->has('remove_image') && $request->remove_image) {
+            if ($category->image && Storage::exists('public/' . $category->image)) {
+                Storage::delete('public/' . $category->image);
             }
-            $data['image'] = null;
+            $validated['image'] = null;
         }
 
-        // Upload gambar baru
         if ($request->hasFile('image')) {
-            if ($category->image && Storage::disk('public')->exists($category->image)) {
-                Storage::disk('public')->delete($category->image);
+            if ($category->image && Storage::exists('public/' . $category->image)) {
+                Storage::delete('public/' . $category->image);
             }
-            $path = $request->file('image')->store('categories', 'public');
-            $data['image'] = $path;
+            $validated['image'] = $request->file('image')->store('categories', 'public');
         }
 
-        $category->update($data);
+        $category->update($validated);
 
-        return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil diperbarui.');
+        return redirect()->route('admin.categories.index')
+            ->with('success', 'Kategori berhasil diupdate!');
     }
 
     public function destroy(Category $category)
     {
-        if ($category->image && Storage::disk('public')->exists($category->image)) {
-            Storage::disk('public')->delete($category->image);
+        if ($category->products()->count() > 0) {
+            return back()->with('error', 'Kategori tidak bisa dihapus karena masih memiliki produk!');
         }
+
+        if ($category->image && Storage::exists('public/' . $category->image)) {
+            Storage::delete('public/' . $category->image);
+        }
+
         $category->delete();
 
-        return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil dihapus.');
-    }
-
-    public function destroyImage(Category $category)
-    {
-        if ($category->image && Storage::disk('public')->exists($category->image)) {
-            Storage::disk('public')->delete($category->image);
-            $category->update(['image' => null]);
-            return response()->json(['success' => true, 'message' => 'Gambar berhasil dihapus.']);
-        }
-        return response()->json(['success' => false, 'message' => 'Gambar tidak ditemukan.'], 404);
+        return redirect()->route('admin.categories.index')
+            ->with('success', 'Kategori berhasil dihapus!');
     }
 }

@@ -322,12 +322,12 @@
 
 @push('scripts')
 <script>
-    // Menampilkan modal edit item
-    function openEditItemModal(id, title, desc, order, active) {
+    function openEditItemModal(id, title, desc, icon, order, active) {
         document.getElementById('form-item').action = `/admin/why-us/items/${id}`;
         document.getElementById('item-id').value = id;
         document.getElementById('item-title').value = title;
         document.getElementById('item-desc').value = desc;
+        document.getElementById('item-icon').value = icon || '';
         document.getElementById('item-order').value = order;
         document.getElementById('item-active').checked = active;
         document.getElementById('modal-item').style.display = 'flex';
@@ -344,7 +344,6 @@
     function closeModal(id) {
         document.getElementById(id).style.display = 'none';
     }
-    // SweetAlert konfirmasi hapus
     function deleteItem(id, type) {
         Swal.fire({
             title: 'Yakin hapus?',
@@ -362,14 +361,12 @@
             }
         });
     }
-    // Modal tambah
     document.getElementById('btn-add-item').addEventListener('click', () => {
         document.getElementById('modal-add-item').style.display = 'flex';
     });
     document.getElementById('btn-add-stat').addEventListener('click', () => {
         document.getElementById('modal-add-stat').style.display = 'flex';
     });
-    // Tutup modal klik di luar
     window.addEventListener('click', (e) => {
         if (e.target.classList.contains('bg-black/50')) {
             document.querySelectorAll('[id^=modal-]').forEach(modal => modal.style.display = 'none');

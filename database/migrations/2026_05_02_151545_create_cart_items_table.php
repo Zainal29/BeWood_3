@@ -6,18 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up(): void
-    {
-        Schema::create('cart_items', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('cart_id')->constrained()->onDelete('cascade');
-            $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->integer('quantity');
-            $table->json('selected_variants')->nullable();
-            $table->integer('price_at_time');
-            $table->timestamps();
-        });
-    }
+    // database/migrations/xxxx_create_cart_items_table.php
+public function up()
+{
+    Schema::create('cart_items', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('cart_id')->constrained()->onDelete('cascade');
+        $table->foreignId('product_id')->constrained()->onDelete('cascade');
+        $table->integer('quantity')->default(1);
+        $table->decimal('price', 15, 2);
+        $table->timestamps();
+    });
+}
 
     public function down(): void
     {

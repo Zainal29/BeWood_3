@@ -73,11 +73,11 @@ class PageController extends Controller
     }
 
     // Halaman FAQ
-    public function faq()
-    {
-        $faqs = Faq::where('is_active', true)->orderBy('order')->get();
-        return view('pages.faq', compact('faqs'));
-    }
+    // public function faq()
+    // {
+    //     $faqs = Faq::where('is_active', true)->orderBy('order')->get();
+    //     return view('pages.faq', compact('faqs'));
+    // }
 
     // Halaman Kontak
     public function contact()
